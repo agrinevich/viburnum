@@ -5,6 +5,8 @@ tpl-front/*
 init.sql
 main.conf
 README.md
+LICENSE
+cpanfile
 rsync.exclude
 .git
 .github
