@@ -1,0 +1,43 @@
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script>
+   function onSubmit(token) {
+      document.getElementById("whoareyou").value = document.referrer;
+      document.getElementById("doyouspeak").value = window.navigator.language;
+      document.getElementById("doyoulikecookies").value = window.navigator.cookieEnabled;
+
+     document.getElementById("email-form").submit();
+   }
+</script>
+
+<form id="email-form" name="email-form" action="/user/enqumail" method="POST">
+<input type="hidden" name="lang_id" value="[% lang_id %]">
+<input type="hidden" name="page_id" value="[% page_id %]">
+<input type="hidden" name="em_key" value="[% em_key %]">
+<input type="hidden" id="secret" name="secret">
+<input type="hidden" id="whoareyou" name="whoareyou">
+<input type="hidden" id="doyouspeak" name="doyouspeak">
+<input type="hidden" id="doyoulikecookies" name="doyoulikecookies">
+
+<table>
+    <tr>
+        <td><input type="text" name="name" value="[% name %]" size="32" placeholder="Ваше ім'я"></td>
+    </tr>
+    <tr>
+        <td><input type="text" name="email" value="[% email %]" size="32" placeholder="Email"></td>
+    </tr>
+    <tr>
+        <td><input type="text" name="phone" value="[% phone %]" size="34" placeholder="Телефон"></td>
+    </tr>
+    <tr>
+        <td>
+            <textarea id="descr" name="descr" rows="8" cols="34" placeholder="Повідомлення">[% descr %]</textarea>
+            <br>
+            <input type="submit" value="Надіслати" class="g-recaptcha"
+            data-sitekey="_RECAPTCHA3_SITE_KEY_"
+            data-callback='onSubmit'
+            data-action='submit'>
+        </td>
+    </tr>
+</table>
+
+</form>

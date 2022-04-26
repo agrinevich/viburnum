@@ -1,0 +1,20 @@
+<h1>Templates</h1>
+
+<hr noshade size="1">
+
+<div style="float: right; margin-right: 20px;">
+    <form name="templ-upd" action="/admin/templ/update" method="POST">
+    <input type="hidden" name="fdir" value="[% fdir %]">
+    <input type="hidden" name="fname" value="[% fname %]">
+    <textarea name="fcode" rows="30" cols="120">[% fcode %]</textarea>
+    <br>
+    <input type="submit" value="Update">
+    </form>
+</div>
+
+<div style="margin-right: 80px;">
+[% list %]
+</div>
+
+
+<br clear="all">

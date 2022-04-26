@@ -1,0 +1,28 @@
+<h1>Dashboard</h1>
+
+<table style="width:100%; border-top:solid 1px #000000; border-left:solid 1px #000000;" cellspacing="0">
+<tr>
+<th style="width: 50%; border-bottom:solid 1px #000000; border-right:solid 1px #000000; background-color:#EEFFEE;">Pages Tree</th>
+<th style="width: 50%; border-bottom:solid 1px #000000; border-right:solid 1px #000000; background-color:#EEFFEE;">Job Queue</th>
+</tr>
+<tr>
+<td style="border-bottom:solid 1px #000000; border-right:solid 1px #000000; padding: 8px 8px;">
+
+    <ul>
+	    <li>Pages changed: [% cat_ch_qty %] / [% cat_qty %]</li>
+	</ul>
+
+    <form name="enqueue" action="/admin/cat/startgen" method="GET">
+        <input type="submit" value="Generate pages">
+    </form>
+
+</td>
+<td style="border-bottom:solid 1px #000000; border-right:solid 1px #000000; padding: 8px 8px;">
+
+    <ul>
+        [% jq_list %]
+    </ul>
+
+</td>
+</tr>
+</table>

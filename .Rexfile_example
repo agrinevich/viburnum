@@ -1,0 +1,172 @@
+use Rex -feature => ['1.4'];
+
+user '_YOUR_USER_';
+key_auth;
+
+logging to_file => './rex.log';
+group myservers => '_SERVER_IP_';
+
+desc 'Deploy to remote';
+task 'deploy', group => 'myservers', sub {
+    my $uptime   = run 'uptime';
+    my $hostname = run 'hostname -I';
+    tellme( str => "$hostname : $uptime" );
+
+    my $prove = run 'cd spot && prove';
+    tellme( str => $prove );
+
+    # raising an exception with die() in the task body will abort the task,
+    # and calling exit() will bail out from the whole rex process
+    if ( $prove =~ /fail/i ) {
+        exit 1;
+    }
+
+    do_task('stop');
+    do_task('rsync');
+    do_task('start');
+};
+
+desc 'Deploy to local';
+task 'deploy_local', sub {
+    my $prove = run 'prove';
+    tellme( str => $prove );
+
+    # raising an exception with die() in the task body will abort the task,
+    # and calling exit() will bail out from the whole rex process
+    if ( $prove =~ /fail/i ) {
+        exit 1;
+    }
+
+    do_task('stop_local');
+    do_task('rsync_local');
+    do_task('start_local');
+};
+
+desc 'Rsync remote';
+task 'rsync', group => 'myservers', sub {
+    my $exclfile = 'spot/rsync.exclude';
+    my $rsync    = run "rsync -a --exclude-from='$exclfile' spot/ /var/www/_SITE_COM_/";
+    tellme( str => $rsync );
+};
+
+desc 'Rsync local';
+task 'rsync_local', sub {
+    my $exclfile = 'rsync.exclude';
+    my $rsync    = run "rsync -av --exclude-from='$exclfile' ./ /var/www/_SITE_LAN_/";
+    tellme( str => $rsync );
+};
+
+desc 'Start on remote';
+task 'start', group => 'myservers', sub {
+    startapp(
+        port      => 5001,
+        workers   => 1,
+        pidfile   => '/var/www/_SITE_COM_/tmp/admin.pid',
+        errorlog  => '/var/www/_SITE_COM_/log/admin-error.log',
+        accesslog => '/var/www/_SITE_COM_/log/admin-access.log',
+        appfile   => '/var/www/_SITE_COM_/bin/admin.psgi',
+    );
+
+    startapp(
+        port      => 5002,
+        workers   => 1,
+        pidfile   => '/var/www/_SITE_COM_/tmp/user.pid',
+        errorlog  => '/var/www/_SITE_COM_/log/user-error.log',
+        accesslog => '/var/www/_SITE_COM_/log/user-access.log',
+        appfile   => '/var/www/_SITE_COM_/bin/user.psgi',
+    );
+
+    run '/var/www/_SITE_COM_/bin/jqctl.pl start';
+    my $jq_result = $?;
+    tellme( str => 'jobqueue: ' . $jq_result );
+};
+
+desc 'Start on local';
+task 'start_local', sub {
+    startapp(
+        port      => 5002,
+        workers   => 1,
+        pidfile   => '/var/www/_SITE_LAN_/tmp/admin.pid',
+        errorlog  => '/var/www/_SITE_LAN_/log/admin-error.log',
+        accesslog => '/var/www/_SITE_LAN_/log/admin-access.log',
+        appfile   => '/var/www/_SITE_LAN_/bin/admin.psgi',
+    );
+
+    startapp(
+        port      => 5003,
+        workers   => 1,
+        pidfile   => '/var/www/_SITE_LAN_/tmp/user.pid',
+        errorlog  => '/var/www/_SITE_LAN_/log/user-error.log',
+        accesslog => '/var/www/_SITE_LAN_/log/user-access.log',
+        appfile   => '/var/www/_SITE_LAN_/bin/user.psgi',
+    );
+
+    run '/var/www/_SITE_LAN_/bin/jqctl.pl start';
+    my $jq_result = $?;
+    tellme( str => 'JobQueue launch errors: ' . $jq_result );
+};
+
+desc 'Stop on remote';
+task 'stop', group => 'myservers', sub {
+    stopapp( pidfile => '/var/www/_SITE_COM_/tmp/admin.pid' );
+    stopapp( pidfile => '/var/www/_SITE_COM_/tmp/user.pid' );
+
+    run '/var/www/_SITE_COM_/bin/jqctl.pl stop';
+    my $jq_result = $?;
+    tellme( str => 'JobQueue QUIT errors: ' . $jq_result );
+};
+
+desc 'Stop on local';
+task 'stop_local', sub {
+    stopapp( pidfile => '/var/www/_SITE_LAN_/tmp/admin.pid' );
+    stopapp( pidfile => '/var/www/_SITE_LAN_/tmp/user.pid' );
+
+    run '/var/www/_SITE_LAN_/bin/jqctl.pl stop';
+    my $jq_result = $?;
+    tellme( str => 'JobQueue QUIT errors: ' . $jq_result );
+};
+
+sub startapp {
+    my (%args) = @_;
+
+    my $pidfile   = $args{pidfile};
+    my $errorlog  = $args{errorlog};
+    my $accesslog = $args{accesslog};
+    my $appfile   = $args{appfile};
+    my $port      = $args{port};
+    my $workers   = $args{workers};
+
+    run
+        "starman --daemonize --port $port --workers $workers --pid $pidfile --error-log $errorlog --access-log $accesslog $appfile";
+    my $result = $?;
+    tellme( str => $appfile . ' launch errors: ' . $result );
+    return;
+}
+
+sub stopapp {
+    my (%args) = @_;
+
+    my $pidfile = $args{pidfile};
+
+    my $pid = run "cat $pidfile";
+    if ( !$pid ) {
+        tellme( str => "Failed to read PID from file - $pidfile, skip" );
+        return;
+    }
+
+    run "kill -s QUIT $pid";
+    tellme( str => "QUIT errors: $?" );
+    return;
+}
+
+sub tellme {
+    my (%args) = @_;
+
+    my $str = $args{str};
+
+    say $str;
+
+    return;
+}
+
+1;

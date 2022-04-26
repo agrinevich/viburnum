@@ -1,0 +1,16 @@
+<h2>Mark</h2>
+
+<form name="mark-upd" action="/admin/cat/markupd" method="POST">
+    <input type="hidden" name="page_id" value="[% page_id %]">
+    <input type="hidden" name="lang_id" value="[% lang_id %]">
+    <input type="hidden" name="id" value="[% id %]">
+    <input type="text" name="name" value="[% name %]" size="16" maxlength="16">
+    <br>
+    <!-- TODO: add wysiwyg -->
+    <textarea name="value" rows="30" cols="120">[% value %]</textarea><br>
+    <input type="submit" value="Update">
+    <input type="checkbox" name="copy" value="1"> Copy to all pages in lang version
+</form>
+<br>
+
+<a href="/admin/cat/edit?id=[% page_id %]">back to page</a>

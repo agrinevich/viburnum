@@ -1,0 +1,41 @@
+<h1>Pages</h1>
+
+<form name="cat-add" action="/admin/cat/add" method="POST">
+Name: <input type="text" name="name" size="32">
+Nick: <input type="text" name="nick" size="24">
+<select name="parent_id">
+[% cat_options %]
+</select>
+<input type="submit" value="Add">
+</form>
+
+<hr noshade size="1">
+
+<table>
+<tr>
+<th>kill</th>
+<th>id</th>
+<th>prio</th>
+<th>navi</th>
+<th>name</th>
+</tr>
+[% list %]
+</table>
+<br>
+
+<table>
+<tr>
+    <td>
+        <form name="enqueue_sitemap" action="/admin/cat/startgen" method="GET">
+        <input type="hidden" name="mode" value="9">
+        <input type="submit" value="1 - Create structure">
+        </form>
+    </td>
+    <td>
+        <form name="enqueue_pages" action="/admin/cat/startgen" method="GET">
+        <input type="hidden" name="mode" value="0">
+        <input type="submit" value="2 - Generate pages">
+        </form>
+    </td>
+</tr>
+</table>

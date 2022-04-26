@@ -1,0 +1,41 @@
+<table style="float: left; background-color: aquamarine; margin-right: 40px;">
+    <tr>
+        <th colspan="2">[% lang_name %]</th>
+    </tr>
+    <tr style="vertical-align: top;">
+        <td>
+
+            <h4>Marks</h4>
+
+            <ol>
+                [% marks %]
+            </ol>
+
+            <form name="mark-add" action="/admin/cat/markadd" method="POST">
+                <input type="hidden" name="page_id" value="[% page_id %]">
+                <input type="hidden" name="lang_id" value="[% lang_id %]">
+                <input type="text" name="name" size="16">
+                <input type="submit" value="Add">
+            </form>
+
+        </td>
+        <td>
+
+            <h4>Files</h4>
+
+            <ol>
+                [% files %]
+            </ol>
+
+            <form name="file-upload" action="/admin/cat/fileupload" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="page_id" value="[% page_id %]">
+                <input type="hidden" name="lang_id" value="[% lang_id %]">
+                <input type="file" name="file">
+                <br>
+                <input type="submit" value="Upload">
+            </form>
+
+        </td>
+    </tr>
+</table>
+

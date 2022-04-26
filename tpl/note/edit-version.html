@@ -1,0 +1,30 @@
+<table>
+<form name="version-update" action="/admin/note/updvers" method="POST">
+<input type="hidden" name="id" value="[% id %]">
+<input type="hidden" name="note_id" value="[% note_id %]">
+<tr>
+    <td>
+        <strong>[% lang_name %]</strong>
+        <br>
+        Name: <input type="text" name="name" value="[% name %]" size="32">
+        p_title: <input type="text" name="p_title" value="[% p_title %]" size="32">
+        <br>
+        p_descr: <input type="text" name="p_descr" value="[% p_descr %]" size="32">
+        param_01: <input type="text" name="param_01" value="[% param_01 %]" size="32">
+        <br>
+        param_02: <input type="text" name="param_02" value="[% param_02 %]" size="32">
+        param_03: <input type="text" name="param_03" value="[% param_03 %]" size="32">
+        <br>
+        param_04: <input type="text" name="param_04" value="[% param_04 %]" size="32">
+        param_05: <input type="text" name="param_05" value="[% param_05 %]" size="32">
+    </td>
+</tr>
+<tr valign="top">
+    <td>
+        <textarea id="descr[% id %]" name="descr" rows="8" cols="90">[% descr %]</textarea>
+        <br>
+        <input type="submit" value="Update '[% lang_name %]' version">
+    </td>
+</tr>
+</form>
+</table>

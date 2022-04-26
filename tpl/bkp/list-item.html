@@ -1,0 +1,17 @@
+<tr>
+    <td>[% name %]</td>
+    <td>
+        <form name="bkp-delete" action="/admin/bkp/delete" method="POST">
+            <input type="hidden" name="name" value="[% name %]">
+            <input type="submit" value="Delete" onclick="return confirm('Delete?')">
+        </form>
+    </td>
+    <td>
+        <form name="bkp-restore" action="/admin/bkp/restore" method="POST">
+            <input type="hidden" name="name" value="[% name %]">
+            <input type="checkbox" name="tpl" value="1" checked > Tpl
+            <input type="checkbox" name="sql" value="1" checked > DB
+            <input type="submit" value="Restore">
+        </form>
+    </td>
+</tr>

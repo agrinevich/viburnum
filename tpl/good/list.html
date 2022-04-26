@@ -1,0 +1,106 @@
+<a href="/admin/good/fetchimages">Images: [% new_img_qty %]</a> |
+<a href="/admin/good/import">Import</a> |
+<hr noshade size=1>
+
+<h1>Goods: [% qty %]</h1>
+
+<form name="good-search" action="/admin/good" method="GET">
+<table border=1>
+<tr>
+<td rowspan="6">
+<select name="f_cat" size="9" multiple>
+[% cat_options %]
+</select>
+</td>
+</tr>
+<tr>
+<td>
+	<select name="f_sup">
+	[% sup_options %]
+	</select>
+</td>
+</tr>
+<tr><td>Code: <input type="text" name="f_code" value="[% f_code %]" size="16"></td></tr>
+<tr><td>Name: <input type="text" name="f_name" value="[% f_name %]" size="16"></td></tr>
+<tr><td><input type="checkbox" name="f_lost" value="1"> Lost only</td></tr>
+<tr>
+<td>
+	<input type="submit" value="Search" style="background-color:#d2e8f4">
+</td>
+</tr>
+</table>
+</form>
+<br>
+
+<script language="JavaScript">
+
+	function toggle(source) {
+		checkboxes = document.getElementsByName('id');
+		for(var i=0, n=checkboxes.length;i<n;i++) {
+			checkboxes[i].checked = source.checked;
+		}
+	}
+
+	function doassign() {
+		document.getElementById('act').value = "assign";
+		document.getElementById('good-multi-form').submit();
+	}
+
+	function dodelete() {
+		document.getElementById('act').value = "delete";
+		document.getElementById('good-multi-form').submit();
+	}
+
+	function applymargin() {
+		document.getElementById('act').value = "apply_margin";
+		document.getElementById('good-multi-form').submit();
+	}
+
+</script>
+
+<form name="good-multi-form" id="good-multi-form" action="/admin/good/multi" method="POST">
+<input type="hidden" name="act" id="act">
+<input type="hidden" name="f_lost" id="f_lost" value="[% f_lost %]">
+<input type="hidden" name="f_cat" id="f_cat" value="[% f_cat %]">
+<input type="hidden" name="f_sup" id="f_sup" value="[% f_sup %]">
+
+<table>
+<tr>
+<th><input type="checkbox" onClick="toggle(this)" /> All</th>
+<th>code</th>
+<th>price</th>
+<th>name</th>
+<th>image</th>
+</tr>
+[% list %]
+</table>
+<br>
+
+<table>
+<tr>
+<td>
+<select name="cat_id" size="8" multiple>
+[% cat_options %]
+</select>
+<br>
+<input type="button" value="Bind to cat" onClick="doassign();">
+</td>
+<td>
+<input type="button" value="Delete" onClick="dodelete();">
+</td>
+<td>
+<input type="text" name="margin" size="3">% ([% margin %])
+<input type="button" value="Apply margin" onClick="applymargin();">
+</td>
+</tr>
+</table>
+<br>
+
+    <form name="enqueue_shop" action="/admin/cat/startgen" method="GET">
+    <input type="hidden" name="mode" value="1">
+    <input type="submit" value="Generate shop">
+    </form>
+
+    <a href="/admin/sup">Suppliers</a> |
+
+</form>

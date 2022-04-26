@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<title>SSG-2 Panel</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    table, th, td{border:1px solid; border-collapse:collapse; vertical-align:top;}
+    table, th{table-layout:auto;}
+    table{width:100%; margin-bottom:15px;}
+    th, td{padding:5px 8px;}
+    td{border-width:0 1px;}
+    table, th, td {border-color:#D7D7D7;}
+    th {color:#FFFFFF; background-color:#373737;}
+    tr {color:inherit; background-color:#FBFBFB;}
+    table a {background-color:inherit;}
+    hr {border: none; height: 1px; background: #979797;}
+    .bold{font-weight: bold;}
+    .admin-catlink-0 {color:darkblue;}
+    .admin-catlink-0h {color:#979797;}
+    .admin-catlink-1 {color:darkmagenta;}
+    .admin-catlink-1h {color:#979797;}
+    .admin-catlink-2 {color:darkgreen;}
+    .admin-catlink-2h {color:#979797;}
+</style>
+
+
+</head>
+<body>
+
+<!-- <a href="/admin/dash">Dashboard</a> | -->
+<a href="/admin/bkp">Backups</a> |
+<a href="/admin/templ">Templates</a> |
+<a href="/admin/jq">JobQueue</a> |
+<a href="/admin/lang">Languages</a> |
+<a href="/admin/mark">Global Marks</a> |
+<a href="/admin/cat">Pages</a> |
+<a href="/" target="_blank">Site</a> |
+<hr noshade size=1>
+
+[% body_html %]
+
+<hr noshade size=1>
+<a href="https://www.avalanche.kiev.ua/" target="_blank">Avalanche</a>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+[% html_lang %]
+<head>
+
+    <base href="[% site_host %]">
+    <title>[% page_title %]</title>
+    <meta name="description" content="[% page_descr %]">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+[% lang_metatags %]
+
+[% page_head %]
+
+</head>
+<body>
+
+<input type="checkbox" id="checkbox">
+<label class="mnav-btn" for="checkbox"></label>
+<div class="mnav">
+<ul>
+[% mnavi %]
+</ul>
+</div>
+
+<div id="header">
+<h1>[% page_name %]</h1>
+</div>
+
+<div id="breadcrumbs">
+[% breadcrumbs %]
+</div>
+
+<div id="content">
+    <div id="dnav">
+    <ul>
+    [% dnavi %]
+    </ul>
+    </div>
+    <div id="main">
+    [% page_main %]
+    </div>
+</div>
+
+<hr>
+
+<footer>
+[% lang_links %]
+[% page_footer %]
+[% tos_link %]
+</footer>
+
+</body>
+</html>

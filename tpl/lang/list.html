@@ -1,0 +1,20 @@
+<h1>Languages</h1>
+
+<form name="lang-add" action="/admin/lang/add" method="POST">
+Name: <input type="text" name="name" size="32" maxlength="32">
+Nick: <input type="text" name="nick" size="2" maxlength="2">
+ISO code: <input type="text" name="isocode" size="2" maxlength="2">
+<input type="submit" value="Add" onclick="return confirm('Add new lang version?')">
+</form>
+
+<hr noshade size="1">
+
+<table>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>nick</th>
+<th>ISO code</th>
+</tr>
+[% list %]
+</table>

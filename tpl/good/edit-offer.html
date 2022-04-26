@@ -1,0 +1,15 @@
+<form name="good-offer-update" action="/admin/good/updoffer" method="POST">
+<input type="hidden" name="id" value="[% id %]">
+<input type="hidden" name="good_id" value="[% good_id %]">
+<tr>
+	<td>
+		<!-- <a href="/admin/good/deloffer?id=[% id %]&good_id=[% good_id %]" onclick="return confirm('Delete?');">X</a> -->
+		<span style="background-color: [% color_value %];">[% color_name %]</span>
+		[% size_name %]
+		<input type="text" name="price2" value="[% price2 %]" size="8">
+		- <input type="text" name="discount" value="[% discount %]" size="2"> %
+		Qty:<input type="text" name="qty" value="[% qty %]" size="4">
+		<!-- <input type="submit" value="Update"> -->
+	</td>
+</tr>
+</form>

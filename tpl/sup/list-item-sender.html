@@ -1,0 +1,24 @@
+<li><strong>[% cp_descr %]</strong>, [% upd_dt %]
+
+	<table>
+		<tr>
+			<th>sender CPPs</th>
+			<th>
+				<form name="np-fetchcp" action="/admin/sup/np/fetchsendercpps" method="GET">
+					<input type="hidden" name="sup_id" value="[% sup_id %]">
+					<input type="hidden" name="cp_ref" value="[% cp_ref %]">
+					<input type="hidden" name="cp_id" value="[% cp_id %]">
+					<input type="submit" value="Fetch NP senders CPPs">
+				</form>
+			</th>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<ol>
+					[% persons %]
+				</ol>
+			</td>
+		</tr>
+	</table>
+
+</li>

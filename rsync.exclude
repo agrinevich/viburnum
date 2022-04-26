@@ -1,0 +1,13 @@
+log/*
+tmp/*
+html/*
+tpl-front/*
+init.sql
+main.conf
+README.md
+rsync.exclude
+.git
+.github
+.gitignore
+.Rexfile
+.Rexfile.lock

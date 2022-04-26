@@ -1,0 +1,1 @@
+Купить [% cat_text %] [% name %] [% descr %]

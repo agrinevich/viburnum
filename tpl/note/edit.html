@@ -1,0 +1,34 @@
+<h1>Note</h1>
+
+<table>
+    <tr>
+        <td>[% nick %].html</td>
+    </tr>
+    <tr>
+        <td><a href="/admin/note?page_id=[% page_id %]">back to notes list</a></td>
+    </tr>
+</table>
+
+<h2>Images</h2>
+
+<table>
+    <tr>
+        <td>
+[% images %]
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <form name="image-upload" action="/admin/note/upimg" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="hidden" name="id" value="[% id %]">
+        <input type="hidden" name="page_id" value="[% page_id %]">
+        <input type="submit" value="upload">
+        </form>
+        </td>
+    </tr>
+</table>
+
+<h2>Versions</h2>
+
+[% versions %]

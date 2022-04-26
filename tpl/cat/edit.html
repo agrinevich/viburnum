@@ -1,0 +1,28 @@
+<h2>Page</h2>
+
+<form name="cat-update" action="/admin/cat/update" method="POST">
+<input type="hidden" name="id" value="[% id %]">
+    Hidden: <input type="text" name="hidden" value="[% hidden %]" size="1">
+    Navi: <input type="text" name="navi_on" value="[% navi_on %]" size="1">
+    Prio: <input type="text" name="priority" value="[% priority %]" size="3">
+    <br>
+    Mode: <select name="mode">
+        [% mode_options %]
+    </select>
+    <br>
+    Name: <input type="text" name="name" value="[% name %]" size="32">
+    <br>
+    Nick: <input type="text" name="nick" value="[% nick %]" size="24">
+    <br>
+    Parent: <select name="parent_id">
+    [% cat_options %]
+    </select>
+    <br>
+    <input type="submit" value="Update">
+</form>
+
+<h3>Language versions</h3>
+
+[% lang_versions %]
+
+<br clear="all">

@@ -1,0 +1,44 @@
+<div itemscope itemtype="https://schema.org/Product">
+
+	<h1 itemprop="name">[% name %]</h1>
+
+	<div style="background-color: #eeeeee;">
+
+		<div>
+			Код: <span itemprop="sku">[% code %]</span>
+		</div>
+
+		<div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+			<table>
+				<tr>
+					<th>Размер</th>
+					<th>Цвет</th>
+					<th>Цена</th>
+					<th>Купить</th>
+				</tr>
+				[% offers_d %]
+			</table>
+		</div>
+
+		<div>
+			[% img_list %]
+		</div>
+
+		<div itemprop="description">
+			[% descr %]
+		</div>
+
+		<div class="supplier_info">
+			Продавец: [% sup_info %]
+		</div>
+
+	</div>
+	<br>
+
+	<h2>Продолжить покупки</h2>
+
+	<div class="cat_links">
+		[% cat_links %]
+	</div>
+
+</div>
