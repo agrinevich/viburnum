@@ -1,6 +1,7 @@
+assets/*
+html/*
 log/*
 tmp/*
-html/*
 tpl-front/*
 init.sql
 main.conf
