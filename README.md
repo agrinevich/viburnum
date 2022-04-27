@@ -6,6 +6,10 @@
 
 Viburnum is Content Management System (CMS) with builtin Static Site Generator.
 
+This project is still **work in progress**. You can get updates in one of following ways:
+- create ssh key on your server and i will send updates via Github actions
+- or just git clone this repo and then git pull
+
 ![screenshot](/assets/images/cms-viburnum-screenshot.png)
 
 CMS consists of 3 applications:
@@ -26,7 +30,7 @@ You will need on server:
 - gcc
 - nginx
 - mariadb
-- rsync (to deploy from 'spot' dir to web-server dir with Rex)
+- rsync (to deploy from 'spot' dir to web-server dir with [Rex](https://github.com/RexOps/Rex/))
 - mc (optional)
 - tmux (optional)
 - certbot
