@@ -6,9 +6,7 @@
 
 Viburnum is Content Management System (CMS) with builtin Static Site Generator.
 
-This project is still **work in progress**. You can get updates in one of following ways:
-- create ssh key on your server and i will send updates via Github actions
-- or just git clone this repo and then git pull
+This project is still **work in progress**.
 
 ![screenshot](/assets/images/cms-viburnum-screenshot.png)
 
@@ -55,7 +53,7 @@ Each website on server needs its own system user.
 - create /var/www/myblog.com/index.html
 - redirect domain A-records to ip of your server
 - create dir /home/user/spot
-- git clone repo to 'spot' dir (if you're setting up client server you should deploy via Github Action)
+- git clone repo to 'spot' dir (if you're setting up server for your real world client you should create ssh key and deploy via Github Action)
 - cd spot
 - run 'prove -l' to check all dependencies met and code compiles
 - create MariaDB user ('myblog' for example)
@@ -78,7 +76,6 @@ Each website on server needs its own system user.
 
 ## Usage
 
-Go "https://www.myblog.com/admin/" and enter login and password you set in main.conf
-Admin panel will be on your screen.
+Go "www.myblog.com/admin/" and enter login and password you set in main.conf
 
 TODO: add CMS manual
