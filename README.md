@@ -6,7 +6,7 @@
 
 Viburnum is Content Management System (CMS) with builtin Static Site Generator.
 
-This project is still **work in progress**.
+This project is live but still **work in progress**.
 
 ![screenshot](/assets/images/cms-viburnum-screenshot.png)
 
@@ -38,21 +38,19 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 
 ## Setup
 
-Each website on server needs its own system user.
-
-- add system user (like 'myblog' if you have site 'myblog.com')
+- connect to server via ssh as root
+- add system user for website (like 'myblog' if you have site 'myblog.com')
+- reconnect as system user (like 'myblog')
 - create and store tmux session (optional, you can skip this step)
-- connect to server via ssh
-- switch to root (su -)
+- switch to 'root' (su -)
 - mkdir /var/www/myblog.com
 - chown -R $USER:$USER /var/www/myblog.com
 - chmod -R 755 /var/www/myblog.com (if you need)
 - create myblog.com.conf in /etc/nginx/conf.d/ (there's example in github repo)
 - restart nginx
-- switch back to your system user ('myblog')
+- switch back to website system user ('myblog')
 - create /var/www/myblog.com/index.html
-- redirect domain A-records to ip of your server
-- create dir /home/user/spot
+- create dir ~/spot
 - git clone repo to 'spot' dir (if you're setting up server for your real world client you should create ssh key and deploy via Github Action)
 - cd spot
 - run 'prove -l' to check all dependencies met and code compiles
@@ -66,13 +64,14 @@ Each website on server needs its own system user.
 - create and fill main.conf
 - copy ~/spot/tpl-front to /var/www/myblog.com
 - setup ssh connection from local PC to server with key auth
-- [from local PC] scp -r ./html/* myblog@serverip:/home/myblog/spot/html
+- [on local PC] scp -r ./html/* myblog@serverip:/home/myblog/spot/html
 - [on server] copy files from ./spot/html to /var/www/myblog.com/html
 - [on local PC] create project dir and .Rexfile in it (there's example in repo)
-- check port numbers in .Rexfile (it must be the same in myblog.com.conf for nginx)
+- check port numbers in .Rexfile (it must be the same in myblog.com.conf for nginx, and for each website you must use its own port numbers)
 - rex -f .Rexfile deploy (you need [Rex](https://github.com/RexOps/Rex/) on local PC to start, stop, deploy Viburnum app), probably i should add more ways to do it
 - run "certbot --nginx" to install Let's Encrypt certificate
 - restart nginx
+- redirect domain A-records to ip of your server
 
 ## Usage
 
