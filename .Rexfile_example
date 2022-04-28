@@ -84,7 +84,7 @@ task 'start', group => 'myservers', sub {
 desc 'Start on local';
 task 'start_local', sub {
     startapp(
-        port      => 5002,
+        port      => 5001,
         workers   => 1,
         pidfile   => '/var/www/_SITE_LAN_/tmp/admin.pid',
         errorlog  => '/var/www/_SITE_LAN_/log/admin-error.log',
@@ -93,7 +93,7 @@ task 'start_local', sub {
     );
 
     startapp(
-        port      => 5003,
+        port      => 5002,
         workers   => 1,
         pidfile   => '/var/www/_SITE_LAN_/tmp/user.pid',
         errorlog  => '/var/www/_SITE_LAN_/log/user-error.log',
