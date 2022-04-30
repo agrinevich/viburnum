@@ -41,7 +41,7 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - connect to server via ssh (or [Cockpit](https://github.com/cockpit-project/cockpit/)) as root
 - add user for website (like 'myblog' if you have site 'myblog.com')
 - disconnect
-- i would recommend to setup ssh login with keys (create ssh keys and transfer public key to server)
+- setup ssh login to server with keys (create ssh keys and transfer public key to server)
 - connect via ssh as user (like 'myblog')
 - chsh --shell /bin/bash myblog (optional, you can skip this step)
 - create and store tmux session (optional, you can skip this step)
@@ -63,18 +63,16 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - check/change prefilled primary language in init.sql (English by default)
 - mysql -u admin -p myblog_db < ~/spot/init.sql
 - cd /var/www/myblog.com
-- create dirs: tmp, log, img/la, img/sm, img2/la, img2/sm, data/breadcrumbs, data/navi, bkp
+- create dirs: tmp, log, bkp, img/la, img/sm, img2/la, img2/sm, data/navi, data/breadcrumbs
 - create and fill main.conf
-- copy ~/spot/tpl-front to /var/www/myblog.com
-- setup ssh connection from local PC to server with key auth
-- [on local PC] scp -r ./html/* myblog@serverip:/home/myblog/spot/html
-- [on server] copy files from ./spot/html to /var/www/myblog.com/html
+- copy ~/spot/tpl-front to /var/www/myblog.com (you can use mc)
+- [on local PC] scp -r ./html/* myblog@serverip:/var/www/myblog.com/html
 - [on local PC] create project dir and .Rexfile in it (there's example in repo)
 - check port numbers in .Rexfile (it must be the same in myblog.com.conf for nginx, and for each website you must use its own port numbers)
 - rex -f .Rexfile deploy (you need [Rex](https://github.com/RexOps/Rex/) on local PC to start, stop, deploy Viburnum app), probably i should add more ways to do it
-- run "certbot --nginx" to install Let's Encrypt certificate
-- restart nginx
 - redirect domain A-records to ip of your server
+- when ip points to server run "certbot --nginx" to install Let's Encrypt certificate
+- restart nginx
 
 ## Usage
 
