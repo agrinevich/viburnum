@@ -1,0 +1,22 @@
+name: Deploy_snth
+
+on: [workflow_dispatch]
+
+jobs:
+  scp_to_server:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Copy repo contents via scp
+      uses: appleboy/scp-action@master
+      env:
+        HOST: ${{ secrets.SNTH_HOST }}
+        USERNAME: ${{ secrets.SNTH_USER }}
+        PORT: ${{ secrets.SNTH_PORT }}
+        KEY: ${{ secrets.SNTH_SSHKEY }}
+      with:
+        source: "."
+        target: ${{ secrets.SNTH_SPOTDIR }}

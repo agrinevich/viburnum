@@ -38,18 +38,21 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 
 ## Setup
 
-- connect to server via ssh as root
-- add system user for website (like 'myblog' if you have site 'myblog.com')
-- reconnect as system user (like 'myblog')
+- connect to server via ssh (or [Cockpit](https://github.com/cockpit-project/cockpit/)) as root
+- add user for website (like 'myblog' if you have site 'myblog.com')
+- disconnect
+- i would recommend to setup ssh login with keys (create ssh keys and transfer public key to server)
+- connect via ssh as user (like 'myblog')
+- chsh --shell /bin/bash myblog (optional, you can skip this step)
 - create and store tmux session (optional, you can skip this step)
 - switch to 'root' (su -)
 - mkdir /var/www/myblog.com
-- chown -R $USER:$USER /var/www/myblog.com
+- chown -R myblog:myblog /var/www/myblog.com
 - chmod -R 755 /var/www/myblog.com (if you need)
 - create myblog.com.conf in /etc/nginx/conf.d/ (there's example in github repo)
 - restart nginx
-- switch back to website system user ('myblog')
-- create /var/www/myblog.com/index.html
+- switch back to user ('myblog')
+- create /var/www/myblog.com/html/index.html
 - create dir ~/spot
 - git clone repo to 'spot' dir (if you're setting up server for your real world client you should create ssh key and deploy via Github Action)
 - cd spot
