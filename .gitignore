@@ -3,3 +3,4 @@ tmp/
 html/
 /main.conf
 /.Rexfile
+/rsync.exclude
