@@ -66,6 +66,7 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - create dirs: tmp, log, bkp, img/la, img/sm, img2/la, img2/sm, data/navi, data/breadcrumbs
 - create and fill main.conf
 - copy ~/spot/tpl-front to /var/www/myblog.com (you can use mc)
+- create ~/spot/rsync.exclude (example file in repo)
 - [on local PC] scp -r ./html/* myblog@serverip:/var/www/myblog.com/html
 - [on local PC] create project dir and .Rexfile in it (there's example in repo)
 - check port numbers in .Rexfile (it must be the same in myblog.com.conf for nginx, and for each website you must use its own port numbers)

@@ -1,0 +1,16 @@
+assets/*
+html/*
+log/*
+tmp/*
+tpl-front/*
+init.sql
+main.conf
+README.md
+LICENSE
+cpanfile
+rsync.exclude
+.git
+.github
+.gitignore
+.Rexfile
+.Rexfile.lock
