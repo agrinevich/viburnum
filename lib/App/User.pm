@@ -36,18 +36,7 @@ sub run {
     my $conf   = $self->config();
     my $logger = $self->logger();
 
-    my $o_request = Plack::Request->new($env);
-    # my $session = $o_request->session(); # psgix.session hash
-
-    # my $method = $o_request->method(); # GET, POST, etc.
-    # my $scheme = $o_request->scheme(); # http or https
-    # my $secure = $o_request->secure(); # https
-    # my $session_options = $o_request->session(); # psgix.session.options hash
-    # my $logger = $o_request->logger(); # psgix.logger code reference
-    # my $user = $o_request->user(); # REMOTE_USER if it's set
-    # my $referer = $o_request->referer(); # $req->headers->referer
-    # my $user_agent = $o_request->user_agent(); #  $req->headers->user_agent
-
+    my $o_request  = Plack::Request->new($env);
     my $o_response = $self->_get_response($o_request);
 
     return $o_response;
@@ -68,9 +57,16 @@ sub _get_response {
         return $o_response;
     }
 
-    #
-    # TODO: if crawler then do not connect to DB !
-    #
+    my $ua = $o_request->user_agent();
+    if ( $ua eq 'AdsBot-Google' ) {
+        my $o_response = $o_request->new_response($_RESPONSE_OK);
+        $o_response->header( 'Content-Type' => 'text/html', charset => 'Utf-8' );
+
+        my $body   = 'hello bot';
+        my $octets = encode( 'UTF-8', $body );
+        $o_response->body($octets);
+        return $o_response;
+    }
 
     # widget does not handle cookies because of SSI call !
     # my $sess_id = $o_request->cookies()->{sess};
