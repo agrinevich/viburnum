@@ -20,24 +20,21 @@ sub doit {
 
     if ( !$nick ) {
         return {
-            url => $app->config->{site}->{host} . '/admin/cat',
+            url => $app->config->{site}->{host} . '/admin/cat?msg=error',
         };
     }
 
-    #
-    # TODO: check nick is unique for this parent!
-    #
-    # my $nick_is_unique = Util::Tree::is_nick_unique(
-    #     dbh       => $app->dbh,
-    #     id        => $id,
-    #     parent_id => $parent_id,
-    #     nick      => $nick,
-    # );
-    # if ( !$nick_is_unique ) {
-    #     return {
-    #         url => $app->config->{site}->{host} . q{/admin/cat/edit?id=} . $id,
-    #     };
-    # }
+    # check nick is unique for this parent!
+    my $nick_is_unique = Util::Tree::is_nick_unique(
+        dbh       => $app->dbh,
+        parent_id => $parent_id,
+        nick      => $nick,
+    );
+    if ( !$nick_is_unique ) {
+        return {
+            url => $app->config->{site}->{host} . '/admin/cat?msg=error',
+        };
+    }
 
     my $h_parent = _get_properties( $app->dbh, $parent_id );
     my $hidden   = $h_parent->{hidden};

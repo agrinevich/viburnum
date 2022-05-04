@@ -48,7 +48,7 @@ sub doit {
         );
         if ( !$nick_is_unique ) {
             return {
-                url => $app->config->{site}->{host} . q{/admin/cat/edit?id=} . $id,
+                url => $app->config->{site}->{host} . '/admin/cat/edit?id=' . $id . '&msg=error',
             };
         }
 
@@ -84,7 +84,7 @@ EOF
     );
 
     return {
-        url => $app->config->{site}->{host} . q{/admin/cat/edit?id=} . $id,
+        url => $app->config->{site}->{host} . '/admin/cat/edit?id=' . $id . '&msg=success',
     };
 }
 

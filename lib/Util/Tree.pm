@@ -28,7 +28,7 @@ sub is_nick_unique {
     my (%args) = @_;
 
     my $dbh        = $args{dbh};
-    my $id         = $args{id};
+    my $id         = $args{id} // 0;
     my $parent_id  = $args{parent_id};
     my $nick2check = $args{nick};
 
