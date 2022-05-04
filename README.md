@@ -79,4 +79,6 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 
 Go "myblog.com/admin/" and enter login and password you set in main.conf
 
-TODO: add CMS manual
+TODO:
+- add CMS manual
+- add unit tests

@@ -57,7 +57,7 @@ sub _get_response {
         return $o_response;
     }
 
-    my $ua = $o_request->user_agent();
+    my $ua = $o_request->user_agent() // q{};
     if ( $ua eq 'AdsBot-Google' ) {
         my $o_response = $o_request->new_response($_RESPONSE_OK);
         $o_response->header( 'Content-Type' => 'text/html', charset => 'Utf-8' );
