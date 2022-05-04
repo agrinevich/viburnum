@@ -14,6 +14,9 @@ sub doit {
     my $app       = $args{app};
     my $o_request = $args{o_request};
 
+    my $o_params = $o_request->parameters();
+    my $msg      = $o_params->{msg} // q{};
+
     my $tpl_path = $app->config->{templates}->{path};
     my $dbh      = $app->dbh;
     my $root_dir = $app->root_dir;
@@ -42,6 +45,16 @@ sub doit {
         }
     );
 
+    my $msg_text = q{};
+    if ($msg) {
+        $msg_text = Util::Renderer::build_msg(
+            root_dir => $root_dir,
+            tpl_path => $tpl_path,
+            tpl_name => 'msg-text.html',
+            msg      => $msg,
+        );
+    }
+
     my $body = Util::Renderer::parse_html(
         root_dir => $root_dir,
         tpl_path => $tpl_path . '/cat',
@@ -49,6 +62,7 @@ sub doit {
         h_vars   => {
             list        => $tree,
             cat_options => $cat_options,
+            msg_text    => $msg_text,
         },
     );
 
