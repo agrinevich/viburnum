@@ -150,6 +150,49 @@ sub make_path {
     return $dir->mkpath;
 }
 
+sub move_dir {
+    my (%args) = @_;
+
+    my $src_dir = $args{src_dir};
+    my $dst_dir = $args{dst_dir};
+
+    return if !-d $src_dir;
+
+    # if ( !-d $dst_dir ) {
+    #     make_path(
+    #         path => $dst_dir,
+    #     );
+    # }
+
+    # my $a_files = get_files(
+    #     dir => $src_dir,
+    # );
+
+    # foreach my $h ( @{$a_files} ) {
+    #     my $src_file = $src_dir . q{/} . $h->{name};
+    #     my $dst_file = $dst_dir . q{/} . $h->{name};
+    #     move_file(
+    #         src => $src_file,
+    #         dst => $dst_file,
+    #     );
+    # }
+
+    # rmdir $src_dir;
+
+    copy_dir_recursive(
+        src_dir => $src_dir,
+        dst_dir => $dst_dir,
+    );
+
+    empty_dir_recursive(
+        dir => $src_dir,
+    );
+
+    rmdir $src_dir;
+
+    return 1;
+}
+
 sub copy_dir_recursive {
     my (%args) = @_;
 
