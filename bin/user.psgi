@@ -5,7 +5,7 @@ use warnings;
 
 use Plack;
 use Plack::Builder;
-use Plack::Middleware::ReverseProxy;
+# use Plack::Middleware::ReverseProxy;
 use Plack::Middleware::RealIP;
 use FindBin qw($Bin);
 
@@ -27,8 +27,9 @@ my $app = sub {
 };
 
 builder {
-    enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' } 'Plack::Middleware::ReverseProxy';
-    enable 'Plack::Middleware::RealIP', header => 'X-Forwarded-For';
-    # trusted_proxy => [qw(192.168.1.0/24 192.168.2.1)];
+    # enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' } 'Plack::Middleware::ReverseProxy';
+    enable 'Plack::Middleware::RealIP',
+        header        => 'X-Forwarded-For',
+        trusted_proxy => [qw(127.0.0.1)];
     $app;
 };
