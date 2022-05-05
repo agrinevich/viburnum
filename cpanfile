@@ -21,7 +21,6 @@ requires 'Number::Bytes::Human';
 requires 'Path::Tiny';
 requires 'Plack';
 requires 'Plack::Middleware::RealIP';
-requires 'Plack::Middleware::ReverseProxy';
 requires 'Starman';
 requires 'Test::Compile';
 requires 'Text::CSV';
