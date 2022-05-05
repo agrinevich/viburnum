@@ -15,6 +15,7 @@ use Util::Langs;
 use Util::Renderer;
 use Util::Files;
 use Util::Tree;
+use Util::Texter;
 
 our $VERSION = '1.1';
 
@@ -138,13 +139,14 @@ sub gen_page {
     my $nick        = $h_args->{nick};
     my $a_langs     = $h_args->{a_langs};
 
-    my $html_path   = $config->{data}->{html_path};
-    my $images_path = $config->{data}->{images_path};
-    my $goods_path  = $config->{data}->{goods_path};
-    my $bread_path  = $config->{data}->{bread_path};
-    my $navi_path   = $config->{data}->{navi_path};
-    my $tpl_path    = $config->{templates}->{path_f};
-    my $site_host   = $config->{site}->{host};
+    my $html_path    = $config->{data}->{html_path};
+    my $images_path  = $config->{data}->{images_path};
+    my $goods_path   = $config->{data}->{goods_path};
+    my $bread_path   = $config->{data}->{bread_path};
+    my $navi_path    = $config->{data}->{navi_path};
+    my $tpl_path     = $config->{templates}->{path_f};
+    my $tpl_path_gmi = $config->{templates}->{path_gmi};
+    my $site_host    = $config->{site}->{host};
 
     # base path to this page (without lang)
     my $base_path = q{};
@@ -154,11 +156,12 @@ sub gen_page {
 
     # lang links, metatags and sitemap hrefs for this page
     my $h_langhref = Util::Langs::build_hrefs(
-        a_langs   => $a_langs,
-        base_path => $base_path,
-        root_dir  => $root_dir,
-        site_host => $site_host,
-        tpl_path  => $tpl_path,
+        a_langs      => $a_langs,
+        base_path    => $base_path,
+        root_dir     => $root_dir,
+        site_host    => $site_host,
+        tpl_path     => $tpl_path,
+        tpl_path_gmi => $tpl_path_gmi,
     );
 
     # generate lang versions for this page
@@ -208,6 +211,32 @@ sub gen_page {
                 out_file  => q{index.html},
             }
         );
+
+        if ($tpl_path_gmi) {
+            $h_marks->{gmi_lang_links} = $h_langhref->{gmi_links};
+
+            my $navi_fname = $id . q{-} . $h_lang->{lang_id} . '.gmi';
+            $h_marks->{gmi_navi} = Util::Files::read_file(
+                file => $root_dir . $navi_path . q{/} . $navi_fname,
+            );
+
+            $h_marks->{gmi_main} = Util::Texter::html2gmi(
+                str => $h_marks->{page_main},
+            );
+
+            Util::Renderer::write_html(
+                $h_marks,
+                {
+                    dbh       => $dbh,
+                    root_dir  => $root_dir,
+                    html_path => $html_path,
+                    tpl_path  => $tpl_path_gmi,
+                    tpl_file  => 'layout.gmi',
+                    out_path  => $h_lang->{lang_path} . $base_path,
+                    out_file  => 'index.gmi',
+                }
+            );
+        }
     }
 
     return {

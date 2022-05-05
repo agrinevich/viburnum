@@ -111,16 +111,18 @@ sub get_lang {
 sub build_hrefs {
     my (%args) = @_;
 
-    my $base_path = $args{base_path};
-    my $app_path  = $args{app_path};
-    my $site_host = $args{site_host};
-    my $root_dir  = $args{root_dir};
-    my $tpl_path  = $args{tpl_path};
-    my $a_langs   = $args{a_langs};
+    my $base_path    = $args{base_path};
+    my $app_path     = $args{app_path};
+    my $site_host    = $args{site_host};
+    my $root_dir     = $args{root_dir};
+    my $tpl_path     = $args{tpl_path};
+    my $tpl_path_gmi = $args{tpl_path_gmi};
+    my $a_langs      = $args{a_langs};
 
-    my $metatags = q{};
-    my $links    = q{};
-    my $maphrefs = q{};
+    my $metatags  = q{};
+    my $links     = q{};
+    my $maphrefs  = q{};
+    my $gmi_links = q{};
 
     foreach my $h_lang ( @{$a_langs} ) {
         my $lang_isocode = $h_lang->{lang_isocode};
@@ -153,6 +155,18 @@ sub build_hrefs {
             },
         );
 
+        if ($tpl_path_gmi) {
+            $gmi_links .= Util::Renderer::parse_html(
+                root_dir => $root_dir,
+                tpl_path => $tpl_path_gmi . '/lang',
+                tpl_name => 'link.gmi',
+                h_vars   => {
+                    lang_name => $lang_name,
+                    path      => $link_path,
+                },
+            );
+        }
+
         $maphrefs .= Util::Renderer::parse_html(
             root_dir => $root_dir,
             tpl_path => $tpl_path . '/lang',
@@ -166,9 +180,10 @@ sub build_hrefs {
     }
 
     return {
-        metatags => $metatags,
-        links    => $links,
-        maphrefs => $maphrefs,
+        metatags  => $metatags,
+        links     => $links,
+        maphrefs  => $maphrefs,
+        gmi_links => $gmi_links,
     };
 }
 

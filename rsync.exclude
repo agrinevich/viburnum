@@ -3,6 +3,7 @@ html/*
 log/*
 tmp/*
 tpl-front/*
+tpl-gmi/*
 init.sql
 main.conf
 README.md

@@ -1,0 +1,5 @@
+[% gmi_main %]
+
+[% gmi_navi %]
+
+[% gmi_lang_links %]

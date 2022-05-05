@@ -110,6 +110,35 @@ const my $DIR_NAME_MAX_LENGTH   => 32;
 # 	return $img_path;
 # }
 
+sub html2gmi {
+    my (%args) = @_;
+
+    my $str = $args{str};
+
+    # replace h1, h2, h3 with #, ##, ###
+    $str =~ s/<h1>/\#/g;
+    $str =~ s/<\/h1>//g;
+
+    $str =~ s/<h2>/\#\#/g;
+    $str =~ s/<\/h2>//g;
+
+    $str =~ s/<h3>/\#\#\#/g;
+    $str =~ s/<\/h3>//g;
+
+    # replace li with *
+    $str =~ s/<li>/\*/g;
+    $str =~ s/<\/li>//g;
+
+    my $hs     = HTML::Strip->new();
+    my $result = $hs->parse($str);
+    $hs->eof;
+
+    $result =~ s/[\s\t]+\n/\n/g;
+    $result =~ s/\n+/\n/g;
+
+    return $result;
+}
+
 sub cut_phrase {
     my ( $str, $max_length ) = @_;
 
