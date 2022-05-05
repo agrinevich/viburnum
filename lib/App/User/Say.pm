@@ -72,11 +72,17 @@ sub doit {
 
     $h_marks->{site_host} = $site_host;
 
-    my $navi_fname = $page_id . q{-} . $h_lang->{lang_id} . '.html';
-    my $navi       = Util::Files::read_file(
-        file => $root_dir . $navi_path . q{/} . $navi_fname,
+    my $mnavi_fname = 'm-' . $page_id . q{-} . $h_lang->{lang_id} . '.html';
+    my $mnavi       = Util::Files::read_file(
+        file => $root_dir . $navi_path . q{/} . $mnavi_fname,
     );
-    $h_marks->{navi} = $navi;
+    $h_marks->{mnavi} = $mnavi;
+
+    my $dnavi_fname = 'd-' . $page_id . q{-} . $h_lang->{lang_id} . '.html';
+    my $dnavi       = Util::Files::read_file(
+        file => $root_dir . $navi_path . q{/} . $dnavi_fname,
+    );
+    $h_marks->{dnavi} = $dnavi;
 
     my $bread_fname = $page_id . q{-} . $h_lang->{lang_id} . '.html';
     my $breadcrumbs = Util::Files::read_file(
