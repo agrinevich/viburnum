@@ -15,7 +15,7 @@ use Util::Langs;
 use Util::Renderer;
 use Util::Files;
 use Util::Tree;
-use Util::Texter;
+use HTML::Strip;
 
 our $VERSION = '1.1';
 
@@ -220,7 +220,7 @@ sub gen_page {
                 file => $root_dir . $navi_path . q{/} . $navi_fname,
             );
 
-            $h_marks->{gmi_main} = Util::Texter::html2gmi(
+            $h_marks->{gmi_main} = html2gmi(
                 str => $h_marks->{page_main},
             );
 
@@ -242,6 +242,35 @@ sub gen_page {
     return {
         base_path => $base_path,
     };
+}
+
+sub html2gmi {
+    my (%args) = @_;
+
+    my $str = $args{str};
+
+    # replace h1, h2, h3 with #, ##, ###
+    $str =~ s/<h1>/\#/g;
+    $str =~ s/<\/h1>//g;
+
+    $str =~ s/<h2>/\#\#/g;
+    $str =~ s/<\/h2>//g;
+
+    $str =~ s/<h3>/\#\#\#/g;
+    $str =~ s/<\/h3>//g;
+
+    # replace li with *
+    $str =~ s/<li>/\* /g;
+    $str =~ s/<\/li>//g;
+
+    my $hs     = HTML::Strip->new();
+    my $result = $hs->parse($str);
+    $hs->eof;
+
+    $result =~ s/[\s\t]+\n/\n/g;
+    $result =~ s/\n+/\n/g;
+
+    return $result;
 }
 
 1;
