@@ -63,106 +63,6 @@ CREATE TABLE global_marks (
 ) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
 
 /*
-  shop is work in progress
-*/
-CREATE TABLE suppliers (
-  `id`    INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name`  VARCHAR(32) NOT NULL DEFAULT '',
-  `title` VARCHAR(255) NOT NULL DEFAULT '',
-  `city`  VARCHAR(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (id)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-CREATE TABLE goods_categories (
-  `good_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `cat_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  PRIMARY KEY (`good_id`,`cat_id`)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-CREATE TABLE goods_colors (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(64) NOT NULL DEFAULT '',
-  `name_md5` CHAR(32) NOT NULL DEFAULT '',
-  `value` VARCHAR(16) NOT NULL DEFAULT '',
-  PRIMARY KEY (id),
-  UNIQUE KEY name_idx (`name_md5`)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-CREATE TABLE goods_sizes (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(8) NOT NULL DEFAULT '',
-  PRIMARY KEY (id),
-  UNIQUE KEY name_idx (`name`)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-INSERT INTO goods_sizes (`name`) VALUES ('40');
-INSERT INTO goods_sizes (`name`) VALUES ('42');
-INSERT INTO goods_sizes (`name`) VALUES ('44');
-INSERT INTO goods_sizes (`name`) VALUES ('46');
-INSERT INTO goods_sizes (`name`) VALUES ('48');
-INSERT INTO goods_sizes (`name`) VALUES ('50');
-INSERT INTO goods_sizes (`name`) VALUES ('52');
-INSERT INTO goods_sizes (`name`) VALUES ('54');
-INSERT INTO goods_sizes (`name`) VALUES ('56');
-INSERT INTO goods_sizes (`name`) VALUES ('58');
-INSERT INTO goods_sizes (`name`) VALUES ('60');
-INSERT INTO goods_sizes (`name`) VALUES ('62');
-INSERT INTO goods_sizes (`name`) VALUES ('64');
-INSERT INTO goods_sizes (`name`) VALUES ('66');
-
-CREATE TABLE goods (
-  `id`      INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `hidden`  TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-  `changed` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-  `sup_id`  INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `price`   DECIMAL(12,4) NOT NULL DEFAULT 0,
-  `code` VARCHAR(32) NOT NULL DEFAULT '',
-  `name` VARCHAR(255) NOT NULL DEFAULT '',
-  `nick` VARCHAR(128) NOT NULL DEFAULT '',
-  `img_path_sm` VARCHAR(255) NOT NULL DEFAULT '',
-  `img_path_la` VARCHAR(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (id),
-  UNIQUE KEY sup_code_idx (`sup_id`,`code`)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-CREATE TABLE goods_versions (
-  `id`      INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `good_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `lang_id` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `name`    VARCHAR(255) NOT NULL DEFAULT '',
-  `p_title` VARCHAR(255) NOT NULL DEFAULT '',
-  `p_descr` VARCHAR(255) NOT NULL DEFAULT '',
-  `descr`   TEXT NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY version_idx (`good_id`, `lang_id`)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-CREATE TABLE goods_offers (
-  `id`       INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `good_id`  INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `color_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `size_id`  INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `qty`      INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `price`    DECIMAL(12,4) NOT NULL DEFAULT 0,
-  `price2`   DECIMAL(12,4) NOT NULL DEFAULT 0,
-  `discount` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  PRIMARY KEY (id),
-  UNIQUE KEY offer_idx (`good_id`,`color_id`, `size_id`)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-CREATE TABLE goods_images (
-  `id`      INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `good_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-  `num`     TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `url`     VARCHAR(255) NOT NULL DEFAULT '',
-  `path_sm` VARCHAR(255) NOT NULL DEFAULT '',
-  `path_la` VARCHAR(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (id),
-  UNIQUE KEY good_url_idx (`good_id`,`url`),
-  INDEX good_idx (`good_id`)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-/*
   Notes is CMS module
 */
 
@@ -224,18 +124,6 @@ CREATE TABLE sess (
   `dest_id`      INT UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   INDEX otp_idx (`otp_sha1hex`)
-) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
-
-CREATE TABLE sess_goods (
-  `sess_id` CHAR(40) NOT NULL DEFAULT '',
-  `sup_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
-  `good_code` VARCHAR(32) NOT NULL DEFAULT '',
-  `good_qty` INT(10) UNSIGNED NOT NULL DEFAULT 0,
-  `good_price` DECIMAL(12,4) NOT NULL DEFAULT 0,
-  `color_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
-  `size_id`  INT(10) UNSIGNED NOT NULL DEFAULT 0,
-  PRIMARY KEY (`sess_id`,`sup_id`,`good_code`, `color_id`, `size_id`),
-  INDEX sess_idx (`sess_id`)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
 
 /*
