@@ -10,13 +10,9 @@ path_gmi = /tpl-gmi
 [data]
 bread_path  = /data/breadcrumbs
 navi_path   = /data/navi
-prices_path = /data/prices
-orders_path = /data/orders
-trxs_path   = /data/trxs
 html_path   = /html
 images_path = /img
 images_path2 = /img2
-goods_path  = /buy
 img_maxw_la = 800
 img_maxh_la = 800
 img_maxw_sm = 80
@@ -46,20 +42,3 @@ port  = 465
 ssl   = 1
 user  = _YOUR_SENDER_EMAIL_
 pass  = _YOUR_DEVICE_PASS_
-
-# price file columns or/and API params
-[supplier_1]
-code_idx    = 0
-name_idx    = 1
-cat_idx     = 2
-descr_idx   = 3
-size_idx    = 4
-color_idx   = 5
-textile_idx = 6
-price_idx   = 7
-images_idx  = 11
-xml_url = https://_SHOP_SUPPLIER_COM_/price.xml
-margin = 50
-api_key = _API_KEY_
-email = _SUPPLIER_EMAIL_
-phone = _SUPPLIER_PHONE_

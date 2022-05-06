@@ -13,11 +13,8 @@ our $VERSION = '1.1';
 
 const my @_WORKERS => qw(
     create_pages
-    create_shop
     create_notes
     create_sitemap
-    upd_goods
-    fetch_images
     send_mail
 );
 

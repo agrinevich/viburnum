@@ -11,7 +11,6 @@ our $VERSION = '1.1';
 
 const my %WORKER => (
     0 => 'CreatePages',
-    1 => 'CreateShop',
     2 => 'CreateNotes',
     9 => 'CreateSitemap',
 );
