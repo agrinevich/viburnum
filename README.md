@@ -6,7 +6,7 @@
 
 Viburnum is Content Management System (CMS) with builtin Static Site Generator.
 
-This project is live but still **work in progress**.
+This project is still **work in progress**.
 
 ![screenshot](/assets/images/cms-viburnum-screenshot.png)
 
@@ -28,7 +28,7 @@ You will need on server:
 - gcc
 - nginx
 - mariadb
-- rsync (to deploy from 'spot' dir to web-server dir with [Rex](https://github.com/RexOps/Rex/))
+- rsync (to deploy from 'spot' dir to web-server dir)
 - mc (optional)
 - tmux (optional)
 - certbot
@@ -74,6 +74,8 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - redirect domain A-records to ip of your server
 - when ip points to server run "certbot --nginx" to install Let's Encrypt certificate
 - restart nginx
+
+CMS Viburnum will automatically generate .gmi (and .html) pages for [Gemini](https://gemini.circumlunar.space/) network if you add directory tpl-gmi with .gmi templates. In such case you will need to setup Gemini server as well (you can use same TLS certificates for your site in both networks).
 
 ## Usage
 
