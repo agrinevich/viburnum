@@ -15,103 +15,6 @@ our $VERSION = '1.1';
 const my $META_DESCR_MAX_LENGTH => 160;
 const my $DIR_NAME_MAX_LENGTH   => 32;
 
-# sub cat_p_title {
-# 	my ( $class, $cat_bread ) = @_;
-
-# 	my $hs       = HTML::Strip->new();
-# 	my $cat_text = $hs->parse($cat_bread);
-# 	$hs->eof;
-
-# 	$cat_text =~ s/>//g;
-# 	$cat_text =~ s/\s+/ /g;
-
-# 	return $cat_text;
-# }
-
-# sub cat_p_descr {
-# 	my ( $class, $p_title ) = @_;
-
-# 	return 'Купить в интернет-магазине ' . $p_title;
-# }
-
-# sub cat_nick {
-# 	my ( $class, $id, $name ) = @_;
-
-# 	my $nick = translit($name);
-
-# 	$nick =~ s/[ _]+/-/g;
-# 	$nick =~ s/[^\w\d\-]//g;
-# 	$nick =~ s/_+/_/g;
-# 	$nick =~ s/^_+//xms;
-# 	$nick =~ s/_+$//xms;
-# 	$nick = lc $nick;
-# 	$nick = substr $nick, 0, $DIR_NAME_MAX_LENGTH;
-# 	$nick .= q{-} . $id;
-
-# 	#
-# 	# FIXME: check nick is unique for this parent!
-# 	#
-
-# 	return $nick;
-# }
-
-# sub cat_image {
-# 	my ( $class, %args ) = @_;
-
-# 	my $id          = $args{id};
-# 	my $root_dir    = $args{root_dir};
-# 	my $html_path   = $args{html_path};
-# 	my $images_path = $args{images_path};
-
-# 	my $img_name = $id . q{.jpg};
-# 	my $img_path = $images_path . q{/cat/} . $img_name;
-# 	my $file     = $root_dir . $html_path . $img_path;
-
-# 	return $img_path if -e $file;
-
-# 	return $images_path . q{/cat/default.jpg};
-# }
-
-# sub good_img_first {
-# 	my ( $class, %args ) = @_;
-
-# 	my $image_name = $class->good_img_name( $args{sup_id}, $args{code} );
-
-# 	my $img_path_sm = good_img_path(
-# 		image_name => $image_name,
-# 		image_type => 'sm',
-# 		%args,
-# 	);
-
-# 	my $img_path_la = good_img_path(
-# 		image_name => $image_name,
-# 		image_type => 'la',
-# 		%args,
-# 	);
-
-# 	return ( $img_path_sm, $img_path_la );
-# }
-
-# sub good_img_path {
-# 	my (%args) = @_;
-
-# 	my $root_dir    = $args{root_dir};
-# 	my $html_path   = $args{html_path};
-# 	my $images_path = $args{images_path};
-# 	my $image_name  = $args{image_name};
-# 	my $image_type  = $args{image_type};
-
-# 	my $img_path = "$images_path/$image_type/default.jpg";
-
-# 	my $images_dir = $root_dir . $html_path . $images_path . "/$image_type";
-# 	my $file       = $images_dir . q{/} . $image_name;
-# 	if ( -e $file ) {
-# 		$img_path = "$images_path/$image_type/$image_name";
-# 	}
-
-# 	return $img_path;
-# }
-
 sub html2gmi {
     my (%args) = @_;
 
@@ -142,11 +45,11 @@ sub html2gmi {
     # my $formatter = HTML::FormatText->new( leftmargin => 0, rightmargin => 50 );
     # my $result    = $formatter->format($str);
 
-    # TODO: replace with cpan solution
+    # TODO: replace with better cpan solution
     $str =~ s/<[^>]*>//g;
 
-    $str =~ s/[\s\t]+\n/\n/g;
-    $str =~ s/\n+/\n/g;
+    $str =~ s/^[\s\t]+\n/\n/g;
+    $str =~ s/\n+/\n\n/g;
 
     return $str;
 }
