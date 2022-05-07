@@ -63,7 +63,22 @@ CREATE TABLE global_marks (
 ) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
 
 /*
-  Notes is CMS module
+  plugins
+    app: admin | user
+*/
+
+CREATE TABLE plugins (
+  `id`   INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `app`  CHAR(8) NOT NULL DEFAULT '',
+  `nick` CHAR(8) NOT NULL DEFAULT '',
+  PRIMARY KEY (id),
+  UNIQUE KEY nick_idx (`nick`)
+) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
+
+INSERT INTO plugins (`app`, `nick`) VALUES ('admin', 'note');
+
+/*
+  'note' is CMS builtin plugin
 */
 
 CREATE TABLE notes (

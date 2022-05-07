@@ -79,9 +79,6 @@ sub work {
     my $order_how = $mode_config->{note}->{order_how};
     my $em_key    = $mode_config->{note}->{em_key};
     my $is_public = $mode_config->{note}->{is_public};
-    # my $em_rcp    = $mode_config->{note}->{em_rcp};
-    # my $em_snd    = $mode_config->{note}->{em_snd};
-    # my $ttl_days    = $mode_config->{note}->{ttl_days};
 
     my $total_qty = Util::Notes::get_qty(
         dbh     => $dbh,

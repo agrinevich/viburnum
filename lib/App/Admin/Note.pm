@@ -15,6 +15,10 @@ use Util::Crypto;
 
 our $VERSION = '1.1';
 
+#
+# 'note' is builtin plugin
+#
+
 sub doit {
     my ( undef, %args ) = @_;
 

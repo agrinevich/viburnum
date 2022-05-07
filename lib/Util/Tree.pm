@@ -9,17 +9,17 @@ use Util::Renderer;
 
 our $VERSION = '1.1';
 
-const my %MODE => (
-    0 => 'Page',
-    1 => 'Shop',
-    2 => 'Notes',
-);
+# TODO: move list to DB to allow third party plugins
+# const my %MODE => (
+#     0 => 'Page',
+#     2 => 'Notes',
+# );
 
-const my %MODE_LINK => (
-    0 => q{},
-    1 => q{},
-    2 => ' &bull; <a href="/admin/note?page_id=%u" target="_blank">notes</a>',
-);
+# TODO: move list to DB to allow third party plugins
+# const my %MODE_LINK => (
+#     0 => q{},
+#     2 => ' &bull; <a href="/admin/note?page_id=%u" target="_blank">notes</a>',
+# );
 
 # my %CHAIN    = (); # cache
 # my %PAGEPATH = (); # cache
@@ -165,31 +165,35 @@ sub build_tree {
     $tpl_name   //= 'list-item';
     $h_selected //= {};
 
-    my %sel    = %{$h_selected};
-    my $result = q{};
-    my $dash   = sprintf q{&nbsp;-} x $level;
+    my %sel       = %{$h_selected};
+    my $result    = q{};
+    my $dash      = sprintf q{&nbsp;-} x $level;
+    my $plink_tpl = ' &bull; <a href="/admin/%s?page_id=%u" target="_blank">%s</a>';
 
     my $sel = <<'EOF';
         SELECT
-            id,
-            priority,
-            hidden,
-            navi_on,
-            mode,
-            name,
-            nick
-        FROM pages
-        WHERE parent_id = ?
-        ORDER BY priority DESC, name ASC
+            p.id,
+            p.priority,
+            p.hidden,
+            p.navi_on,
+            p.mode,
+            p.name,
+            p.nick,
+            pl.nick
+        FROM pages AS p
+        LEFT JOIN plugins AS pl
+            ON p.mode = pl.id
+        WHERE p.parent_id = ?
+        ORDER BY p.priority DESC, p.name ASC
 EOF
     my $sth = $dbh->prepare($sel);
     $sth->execute($parent_id);
-    while ( my ( $id, $priority, $hidden, $navi_on, $mode, $name, $nick, $img_path )
+    while ( my ( $id, $priority, $hidden, $navi_on, $mode, $name, $nick, $plugin )
         = $sth->fetchrow_array() ) {
         my $attr = q{};
         if ( exists $sel{$id} ) { $attr = q{ selected}; }
 
-        my $mode_link = $MODE_LINK{$mode} ? sprintf( $MODE_LINK{$mode}, $id ) : q{};
+        my $mode_link = $plugin ? sprintf( $plink_tpl, $plugin, $id, $plugin ) : q{};
 
         my $color_mode = $hidden ? $mode . 'h' : $mode;
 
@@ -228,41 +232,6 @@ EOF
 
     $sth->finish();
     return $result;
-}
-
-sub find_shop_root {
-    my (%args) = @_;
-
-    my $dbh = $args{dbh};
-
-    my $wanted_mode = 1; # shop
-    my $result_id   = 0;
-
-    my $sel2 = 'SELECT mode FROM pages WHERE id = ?';
-    my $sth2 = $dbh->prepare($sel2);
-
-    my $sel = <<'EOF';
-        SELECT
-            id, parent_id
-        FROM pages
-        WHERE mode = ?
-EOF
-    my $sth = $dbh->prepare($sel);
-    $sth->execute($wanted_mode);
-    while ( my ( $id, $parent_id ) = $sth->fetchrow_array() ) {
-        $sth2->execute($parent_id);
-        my ($parent_mode) = $sth2->fetchrow_array();
-
-        if ( $parent_mode != $wanted_mode ) {
-            $result_id = $id;
-            last;
-        }
-    }
-
-    $sth->finish();
-    $sth2->finish();
-
-    return $result_id;
 }
 
 sub update_child_qty {
@@ -309,14 +278,29 @@ sub get_marks {
 }
 
 sub get_modes {
+    my (%args) = @_;
+
+    my $dbh = $args{dbh};
+
     my @modes = ();
 
-    foreach my $id ( sort keys %MODE ) {
+    my $sel = q{SELECT id, app, nick FROM plugins ORDER BY id ASC};
+    my $sth = $dbh->prepare($sel);
+    $sth->execute();
+    while ( my ( $id, $app, $nick ) = $sth->fetchrow_array() ) {
         push @modes, {
             id   => $id,
-            name => $MODE{$id},
+            app  => $app,
+            name => $nick,
         };
     }
+    $sth->finish();
+
+    unshift @modes, {
+        id   => 0,
+        app  => 'admin',
+        name => 'page',
+    };
 
     return \@modes;
 }
