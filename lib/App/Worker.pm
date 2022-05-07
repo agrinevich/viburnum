@@ -11,6 +11,7 @@ use Util::JobQueue;
 
 our $VERSION = '1.1';
 
+# TODO: move to main.conf to allow custom workers for custom plugins
 const my @_WORKERS => qw(
     create_pages
     create_notes

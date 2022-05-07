@@ -54,7 +54,7 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - switch back to dedicated user ('myblog')
 - create /var/www/myblog.com/html/index.html
 - create dir ~/spot
-- git clone repo to 'spot' dir (if you're setting up server for your real world client you should create ssh key and deploy via Github Action)
+- git clone repo to 'spot' dir (if you're setting up server for your real world client you can either create ssh key and deploy via Github Action or just git pull manually to 'spot' dir)
 - cd spot
 - run 'prove -l' to check all dependencies met and code compiles
 - create MariaDB user ('myblog' for example)
@@ -66,6 +66,7 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - create dirs: tmp, log, bkp, img/la, img/sm, img2/la, img2/sm, data/navi, data/breadcrumbs
 - create and fill main.conf
 - copy ~/spot/tpl-front to /var/www/myblog.com (you can use mc)
+- copy ~/spot/tpl-gmi to /var/www/myblog.com (if you want Gemini mirror of your website)
 - create ~/spot/rsync.exclude (example file in repo)
 - [on local PC] scp -r ./html/* myblog@serverip:/var/www/myblog.com/html
 - [on local PC] create project dir and .Rexfile in it (there's example in repo)
@@ -75,7 +76,7 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - when ip points to server run "certbot --nginx" to install Let's Encrypt certificate
 - restart nginx
 
-CMS Viburnum will automatically generate .gmi (and .html) pages for [Gemini](https://gemini.circumlunar.space/) network if you add directory tpl-gmi with .gmi templates. In such case you will need to setup Gemini server as well (you can use same TLS certificates for your site in both networks).
+CMS Viburnum will automatically generate .gmi (and .html) pages for [Gemini](https://gemini.circumlunar.space/) network if you add directory tpl-gmi with .gmi templates. In such case you will need to setup Gemini server as well (you can use same Lets Encrypt TLS certificate for your site in both networks).
 
 ## Usage
 
@@ -85,3 +86,4 @@ TODO:
 - add CMS manual
 - add [gmid Gemini server](https://github.com/omar-polo/gmid/) setup manual
 - add unit tests
+- add how to create custom plugin

@@ -56,7 +56,7 @@ sub doit {
         page_id   => $id,
     );
 
-    my $a_modes      = Util::Tree::get_modes();
+    my $a_modes      = Util::Tree::get_modes( dbh => $dbh );
     my $mode_options = Util::Renderer::build_options(
         items    => $a_modes,
         id_sel   => $h_page->{mode},
