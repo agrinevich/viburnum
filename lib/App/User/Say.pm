@@ -42,10 +42,27 @@ sub doit {
     );
 
     my $tpl_name = sprintf 'say-%s%s.html', $msg_nick, $h_lang->{lang_suffix};
+    my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
 
-    my $file2check = $root_dir . $tpl_path . '/user/' . $tpl_name;
-    if ( !-e $file2check ) {
-        $tpl_name = sprintf 'say-default%s.html', $h_lang->{lang_suffix};
+    if ( !-e $tpl_file ) {
+        # fallback to primary lang version - without suffix
+        $tpl_name = sprintf 'say-%s.html', $msg_nick;
+        $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
+
+        if ( !-e $tpl_file ) {
+            # fallback to default tpl with given lang version
+            $tpl_name = sprintf 'say-default%s.html', $h_lang->{lang_suffix};
+            $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
+
+            if ( !-e $tpl_file ) {
+                # create tpl from default tpl in primary lang
+                my $tpl_file_primary = $root_dir . $tpl_path . '/user/say-default.html';
+                Util::Files::copy_file(
+                    src => $tpl_file_primary,
+                    dst => $tpl_file,
+                );
+            }
+        }
     }
 
     $h_marks->{page_main} = Util::Renderer::parse_html(
