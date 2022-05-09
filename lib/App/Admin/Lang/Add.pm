@@ -45,15 +45,6 @@ EOF
         lang_id => $id,
     );
 
-    _copy_goods_versions(
-        dbh     => $app->dbh,
-        lang_id => $id,
-    );
-
-    #
-    # TODO: _copy_tpl_versions
-    #
-
     return {
         url => $app->config->{site}->{host} . '/admin/lang',
     };
@@ -112,36 +103,6 @@ EOF2
     $sth->execute();
     while ( my ( $note_id, $name, $p_title, $p_descr, $descr ) = $sth->fetchrow_array() ) {
         $sth2->execute( $note_id, $lang_id, $name, $p_title, $p_descr, $descr );
-    }
-    $sth->finish();
-    $sth2->finish();
-
-    return;
-}
-
-sub _copy_goods_versions {
-    my (%args) = @_;
-
-    my $dbh     = $args{dbh};
-    my $lang_id = $args{lang_id};
-
-    my $ins = <<'EOF3';
-        INSERT INTO goods_versions
-            (good_id, lang_id, name, p_title, p_descr, descr)
-        VALUES
-            (?, ?, ?, ?, ?, ?)
-EOF3
-    my $sth2 = $dbh->prepare($ins);
-
-    my $sel = <<'EOF2';
-        SELECT good_id, name, p_title, p_descr, descr
-        FROM goods_versions
-        WHERE lang_id = 1
-EOF2
-    my $sth = $dbh->prepare($sel);
-    $sth->execute();
-    while ( my ( $good_id, $name, $p_title, $p_descr, $descr ) = $sth->fetchrow_array() ) {
-        $sth2->execute( $good_id, $lang_id, $name, $p_title, $p_descr, $descr );
     }
     $sth->finish();
     $sth2->finish();
