@@ -9,18 +9,6 @@ use Util::Renderer;
 
 our $VERSION = '1.1';
 
-# TODO: move list to DB to allow third party plugins
-# const my %MODE => (
-#     0 => 'Page',
-#     2 => 'Notes',
-# );
-
-# TODO: move list to DB to allow third party plugins
-# const my %MODE_LINK => (
-#     0 => q{},
-#     2 => ' &bull; <a href="/admin/note?page_id=%u" target="_blank">notes</a>',
-# );
-
 # my %CHAIN    = (); # cache
 # my %PAGEPATH = (); # cache
 

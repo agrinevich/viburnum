@@ -46,7 +46,7 @@ sub handle {
 
     if ( !$h_cookies->{sess} ) {
         #
-        # TODO: ? in some cases we need to sync session on another device (see Signin.pm)
+        # ? in some cases we need to sync session on another device (see Signin.pm)
         #
 
         $self->_create(
