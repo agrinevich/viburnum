@@ -8,26 +8,19 @@ use Carp qw(croak carp);
 use Class::Load qw(try_load_class is_class_loaded);
 
 use Util::JobQueue;
+use Util::Files;
 
 our $VERSION = '1.1';
-
-# TODO: move to main.conf to allow custom workers for custom plugins
-const my @_WORKERS => qw(
-    create_pages
-    create_notes
-    create_sitemap
-    send_mail
-);
 
 sub run {
     my ($self) = @_;
 
     my $jqc = Util::JobQueue::new_client( dbh => $self->dbh );
 
-    foreach my $worker_nick (@_WORKERS) {
-        my @orig_chunks  = split m{_}xms, $worker_nick;
-        my @nick_chunks  = map { ucfirst; } @orig_chunks;
-        my $worker_name  = join q{}, @nick_chunks;
+    my $a_files = Util::Files::get_files( dir => $self->root_dir . '/lib/App/Worker' );
+
+    foreach my $h_file ( @{$a_files} ) {
+        my ( $worker_name, undef ) = split /[.]/, $h_file->{name};
         my $worker_class = 'App::Worker::' . $worker_name;
 
         my ( $rc, $err ) = try_load_class($worker_class);

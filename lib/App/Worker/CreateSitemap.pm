@@ -119,7 +119,7 @@ EOF
     $sth->execute($parent_id);
     while ( my ( $id, $navi_on, $child_qty, $nick ) = $sth->fetchrow_array() ) {
         # base path to this page (without lang)
-        # TODO: Uril::Tree::page_path - get rid of recursion ?
+        # ? i could use Uril::Tree::page_path and get rid of recursion
         my $base_path = q{};
         if ($parent_id) {
             $base_path = $parent_path . q{/} . $nick;
