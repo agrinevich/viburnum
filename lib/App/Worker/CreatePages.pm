@@ -199,6 +199,7 @@ sub gen_page {
         );
         $h_marks->{breadcrumbs} = $breadcrumbs;
 
+        # create static index.html page
         Util::Renderer::write_html(
             $h_marks,
             {
@@ -206,9 +207,26 @@ sub gen_page {
                 root_dir  => $root_dir,
                 html_path => $html_path,
                 tpl_path  => $tpl_path,
-                tpl_file  => q{layout.html},
+                tpl_file  => 'layout.html',
                 out_path  => $h_lang->{lang_path} . $base_path,
-                out_file  => q{index.html},
+                out_file  => 'index.html',
+            }
+        );
+
+        # and create half-ready layout template for 'user' app
+        my %umarks = %{$h_marks};
+        $umarks{page_main}  = '[% page_main %]';
+        $umarks{lang_links} = '[% lang_links %]';
+        Util::Renderer::write_html(
+            \%umarks,
+            {
+                dbh       => $dbh,
+                root_dir  => $root_dir,
+                html_path => $html_path,
+                tpl_path  => $tpl_path,
+                tpl_file  => 'layout.html',
+                out_path  => $h_lang->{lang_path} . $base_path,
+                out_file  => 'layout-user.html',
             }
         );
 
