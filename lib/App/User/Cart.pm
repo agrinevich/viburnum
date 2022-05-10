@@ -1,4 +1,4 @@
-package App::User::Say;
+package App::User::Cart;
 
 use strict;
 use warnings;
@@ -18,7 +18,6 @@ sub doit {
 
     my $o_params  = $o_request->parameters();
     my $lang_nick = $o_params->{l} // q{};
-    my $msg_nick  = $o_params->{m} || q{default};
 
     my $dbh        = $app->dbh;
     my $root_dir   = $app->root_dir;
@@ -35,28 +34,18 @@ sub doit {
         lang_nick => $lang_nick,
     );
 
-    my $tpl_name = sprintf 'say-%s%s.html', $msg_nick, $h_lang->{lang_suffix};
+    my $list = q{my goods here.};
+
+    my $tpl_name = sprintf 'cart%s.html', $h_lang->{lang_suffix};
     my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
 
     if ( !-e $tpl_file ) {
-        # fallback to primary lang version - without suffix
-        $tpl_name = sprintf 'say-%s.html', $msg_nick;
-        $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
-
-        if ( !-e $tpl_file ) {
-            # fallback to default tpl with given lang version
-            $tpl_name = sprintf 'say-default%s.html', $h_lang->{lang_suffix};
-            $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
-
-            if ( !-e $tpl_file ) {
-                # create tpl from default tpl in primary lang
-                my $tpl_file_primary = $root_dir . $tpl_path . '/user/say-default.html';
-                Util::Files::copy_file(
-                    src => $tpl_file_primary,
-                    dst => $tpl_file,
-                );
-            }
-        }
+        # create tpl from default tpl
+        my $tpl_file_primary = $root_dir . $tpl_path . '/user/cart.html';
+        Util::Files::copy_file(
+            src => $tpl_file_primary,
+            dst => $tpl_file,
+        );
     }
 
     my $h_marks = {};
@@ -67,6 +56,7 @@ sub doit {
         tpl_name => $tpl_name,
         h_vars   => {
             lang_nick => $h_lang->{lang_nick},
+            list      => $list,
         },
     );
 
@@ -84,7 +74,6 @@ sub doit {
     $h_marks->{lang_links}    = $h_langhref->{links};
 
     my $page = Util::Renderer::parse_html(
-        dbh      => $dbh,
         root_dir => $root_dir,
         tpl_path => $html_path . $page_path,
         tpl_name => 'layout-user.html',
