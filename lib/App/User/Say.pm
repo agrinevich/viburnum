@@ -86,7 +86,7 @@ sub doit {
     my $page = Util::Renderer::parse_html(
         dbh      => $dbh,
         root_dir => $root_dir,
-        tpl_path => $html_path . $page_path,
+        tpl_path => $html_path . $h_lang->{lang_path} . $page_path,
         tpl_name => 'layout-user.html',
         h_vars   => $h_marks,
     );
