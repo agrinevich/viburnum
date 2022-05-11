@@ -141,6 +141,15 @@ CREATE TABLE sess (
   INDEX otp_idx (`otp_sha1hex`)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
 
+CREATE TABLE sess_cart (
+  `sess_id`    CHAR(40) NOT NULL DEFAULT '',
+  `item_id`    INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  `item_qty`   INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  `item_price` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`sess_id`,`item_id`),
+  INDEX sess_idx (`sess_id`)
+) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
+
 /*
   these tables are for TheSchwartz job queue
 */

@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Util::Renderer;
-use Util::Tree;
 use Util::Files;
 use Util::Langs;
 
@@ -19,6 +18,7 @@ sub doit {
     my $o_params  = $o_request->parameters();
     my $lang_nick = $o_params->{l} // q{};
 
+    my $sess       = $app->session;
     my $dbh        = $app->dbh;
     my $root_dir   = $app->root_dir;
     my $site_host  = $app->config->{site}->{host};
@@ -34,7 +34,27 @@ sub doit {
         lang_nick => $lang_nick,
     );
 
-    my $list = q{my goods here.};
+    # TODO: _delete_expired();
+
+    my $a_items = get_items(
+        dbh     => $dbh,
+        sess_id => $sess->sess_id,
+        lang_id => $h_lang->{lang_id},
+    );
+    my $list = q{};
+    foreach my $h ( @{$a_items} ) {
+        $list .= Util::Renderer::parse_html(
+            root_dir => $root_dir,
+            tpl_path => $tpl_path . '/user',
+            tpl_name => 'cart-item.html',
+            h_vars   => {
+                id    => $h->{id},
+                qty   => $h->{qty},
+                price => $h->{price},
+                name  => $h->{name},
+            },
+        );
+    }
 
     my $tpl_name = sprintf 'cart%s.html', $h_lang->{lang_suffix};
     my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
@@ -84,5 +104,71 @@ sub doit {
         body => $page,
     };
 }
+
+sub get_items {
+    my (%args) = @_;
+
+    my $dbh     = $args{dbh};
+    my $sess_id = $args{sess_id};
+    my $lang_id = $args{lang_id};
+
+    my @result = ();
+
+    my $sel = <<'EOF';
+        SELECT sc.item_id, sc.item_qty, sc.item_price, nv.name
+        FROM sess_cart AS sc
+        LEFT JOIN notes_versions AS nv
+            ON sc.item_id = nv.note_id
+        WHERE sc.sess_id = ?
+        AND nv.lang_id = ?
+        ORDER BY nv.name ASC
+EOF
+    my $sth = $dbh->prepare($sel);
+    $sth->execute( $sess_id, $lang_id );
+    while ( my ( $id, $qty, $price, $name ) = $sth->fetchrow_array() ) {
+        push @result, {
+            id    => $id,
+            qty   => $qty,
+            price => $price,
+            name  => $name,
+        };
+    }
+    $sth->finish();
+
+    return \@result;
+}
+
+# sub _delete_expired {
+#     my (%args) = @_;
+
+#     my $dbh      = $args{dbh};
+#     my $ttl_days = $args{ttl_days};
+
+#     return if !$ttl_days;
+
+#     my @ids = ();
+
+#     my $sel = <<'EOF';
+#         SELECT id
+#         FROM notes
+#         WHERE page_id = ?
+#         AND is_ext = 1
+#         AND TO_DAYS(NOW()) - TO_DAYS(add_dt) > ?
+# EOF
+#     my $sth = $dbh->prepare($sel);
+#     $sth->execute( $page_id, $ttl_days );
+#     while ( my ($id) = $sth->fetchrow_array() ) {
+#         push @ids, $id;
+#     }
+#     $sth->finish();
+
+#     foreach my $note_id (@ids) {
+#         $dbh->do("DELETE FROM notes_versions WHERE note_id = $note_id");
+#         $dbh->do("DELETE FROM notes_images WHERE note_id = $note_id");
+#         $dbh->do("DELETE FROM notes WHERE id = $note_id");
+#     }
+
+#     return;
+# }
 
 1;

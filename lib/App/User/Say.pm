@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Util::Renderer;
-use Util::Tree;
 use Util::Files;
 use Util::Langs;
 
