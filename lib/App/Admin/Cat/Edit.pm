@@ -61,8 +61,8 @@ sub doit {
         items    => $a_modes,
         id_sel   => $h_page->{mode},
         root_dir => $root_dir,
-        tpl_path => $tpl_path . '/good',
-        tpl_file => 'mode-option.html',
+        tpl_path => $tpl_path . '/cat',
+        tpl_file => 'option.html',
     );
 
     my $body = Util::Renderer::parse_html(
