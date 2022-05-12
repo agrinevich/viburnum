@@ -1,3 +1,4 @@
+requires 'Archive::Zip';
 requires 'Authen::SASL';
 requires 'Class::Load';
 requires 'Config::Tiny';

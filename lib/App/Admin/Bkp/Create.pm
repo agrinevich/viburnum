@@ -65,24 +65,33 @@ sub doit {
     );
 
     _select_to_file(
+        dbh   => $dbh,
+        file  => $bkp_dir2 . '/pages.txt',
+        table => 'pages',
+        fields =>
+            'id, parent_id, priority, hidden, navi_on, changed, mode, child_qty, good_qty, name, nick',
+    );
+
+    _select_to_file(
         dbh    => $dbh,
-        file   => $bkp_dir2 . '/pages.txt',
-        table  => 'pages',
-        fields => 'id, parent_id, priority, hidden, navi_on, changed, name, nick',
+        file   => $bkp_dir2 . '/plugins.txt',
+        table  => 'plugins',
+        fields => 'id, app, nick',
     );
 
     _select_to_file(
         dbh    => $dbh,
         file   => $bkp_dir2 . '/notes.txt',
         table  => 'notes',
-        fields => 'id, page_id, hidden, prio, add_dt, price, nick',
+        fields => 'id, page_id, hidden, prio, add_dt, price, nick, is_ext, ip',
     );
 
     _select_to_file(
-        dbh    => $dbh,
-        file   => $bkp_dir2 . '/notes_versions.txt',
-        table  => 'notes_versions',
-        fields => 'id, note_id, lang_id, name, p_title, p_descr, descr',
+        dbh   => $dbh,
+        file  => $bkp_dir2 . '/notes_versions.txt',
+        table => 'notes_versions',
+        fields =>
+            'id, note_id, lang_id, name, param_01, param_02, param_03, param_04, param_05, p_title, p_descr, descr',
     );
 
     _select_to_file(
@@ -90,6 +99,12 @@ sub doit {
         file   => $bkp_dir2 . '/notes_images.txt',
         table  => 'notes_images',
         fields => 'id, note_id, num, path_sm, path_la',
+    );
+
+    my $h_zip = Util::Files::create_zip(
+        src_dir => $root_dir . $bkp_path . q{/} . $bkp_name,
+        dst_dir => $root_dir . $bkp_path,
+        name    => $bkp_name,
     );
 
     # reset permission to write

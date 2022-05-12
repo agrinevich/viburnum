@@ -38,6 +38,9 @@ sub doit {
 
     rmdir $bkp_dir;
 
+    my $zip = $root_dir . $bkp_path . q{/} . $bkp_name . '.zip';
+    unlink $zip;
+
     return {
         url => $app->config->{site}->{host} . '/admin/bkp?msg=success',
     };
