@@ -22,7 +22,7 @@ sub doit {
     my $root_dir = $app->root_dir;
 
     #
-    # each backup is a dir with two subdirs 'sql' and 'tpl'
+    # each backup is a dir with two subdirs 'sql' and 'tpl' + zip archive
     #
     my $a_bkps = Util::Files::get_files(
         dir       => $root_dir . $bkp_path,

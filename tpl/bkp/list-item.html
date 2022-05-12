@@ -1,9 +1,15 @@
 <tr>
     <td>[% name %]</td>
     <td>
-        <form name="bkp-delete" action="/admin/bkp/delete" method="POST">
+        <form name="bkp-delete" action="/admin/bkp/delete" method="GET">
             <input type="hidden" name="name" value="[% name %]">
             <input type="submit" value="Delete" onclick="return confirm('Delete?')">
+        </form>
+    </td>
+    <td>
+        <form name="bkp-download" action="/admin/bkp/download" method="GET">
+            <input type="hidden" name="name" value="[% name %]">
+            <input type="submit" value="Download">
         </form>
     </td>
     <td>

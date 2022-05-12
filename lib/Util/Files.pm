@@ -8,9 +8,11 @@ use Carp qw(croak carp);
 use Path::Tiny;
 use File::Copy::Recursive qw(dircopy pathempty);
 use Number::Bytes::Human qw(format_bytes);
+use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 
 our $VERSION = '1.1';
 
+# TODO: move to Admin::Templ
 sub build_tree {
     my ($h_args) = @_;
 
@@ -223,6 +225,29 @@ sub empty_dir_recursive {
         or croak $OS_ERROR;
 
     return;
+}
+
+sub create_zip {
+    my (%args) = @_;
+
+    my $src_dir = $args{src_dir};
+    my $dst_dir = $args{dst_dir};
+    my $name    = $args{name};
+
+    my $file = $dst_dir . q{/} . $name . '.zip';
+
+    my $zip = Archive::Zip->new();
+    $zip->addTree( $src_dir, $name );
+    unless ( $zip->writeToFileNamed($file) == AZ_OK ) {
+        croak 'write error';
+    }
+
+    my $size = -s $file;
+
+    return {
+        file => $file,
+        size => format_bytes($size),
+    };
 }
 
 1;

@@ -53,6 +53,9 @@ sub _get_response {
     }
 
     my $o_response = $o_request->new_response($_RESPONSE_OK);
+    # if () {
+    #     $o_response->content_length( $h_result->{content_length} );
+    # }
     $o_response->header( 'Content-Type' => 'text/html', charset => 'Utf-8' );
     my $octets = encode( 'UTF-8', $h_result->{body} );
     $o_response->body($octets);
