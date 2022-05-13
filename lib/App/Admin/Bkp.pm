@@ -3,6 +3,8 @@ package App::Admin::Bkp;
 use strict;
 use warnings;
 
+use Number::Bytes::Human qw(format_bytes);
+
 use Util::Renderer;
 use Util::Files;
 
@@ -22,7 +24,7 @@ sub doit {
     my $root_dir = $app->root_dir;
 
     #
-    # each backup is a dir with two subdirs 'sql' and 'tpl' + zip archive
+    # TODO: lisy zip files not dirs
     #
     my $a_bkps = Util::Files::get_files(
         dir       => $root_dir . $bkp_path,
@@ -33,12 +35,18 @@ sub doit {
 
     my $bkp_list = q{};
     foreach my $name ( sort @bkps ) {
+        my $zip  = $root_dir . $bkp_path . q{/} . $name . '.zip';
+        my $size = 0;
+        if ( -e $zip ) {
+            $size = -s $zip;
+        }
         $bkp_list .= Util::Renderer::parse_html(
             root_dir => $root_dir,
             tpl_path => $tpl_path . '/bkp',
             tpl_name => 'list-item.html',
             h_vars   => {
                 name => $name,
+                size => format_bytes($size),
             },
         );
     }

@@ -52,13 +52,35 @@ sub _get_response {
         return $o_response;
     }
 
+    # now we know we have 'body'
+
     my $o_response = $o_request->new_response($_RESPONSE_OK);
-    # if () {
-    #     $o_response->content_length( $h_result->{content_length} );
-    # }
-    $o_response->header( 'Content-Type' => 'text/html', charset => 'Utf-8' );
-    my $octets = encode( 'UTF-8', $h_result->{body} );
+
+    if ( $h_result->{content_length} ) {
+        $o_response->content_length( $h_result->{content_length} );
+    }
+
+    if ( $h_result->{content_encoding} ) {
+        $o_response->content_encoding( $h_result->{content_encoding} );
+    }
+
+    if ( $h_result->{file_name} ) {
+        $o_response->header(
+            'Content-Disposition' => 'attachment;filename=' . $h_result->{file_name},
+        );
+    }
+
+    my $content_type;
+    if   ( $h_result->{content_type} ) { $content_type = $h_result->{content_type}; }
+    else                               { $content_type = 'text/html'; }
+    $o_response->header( 'Content-Type' => $content_type, charset => 'Utf-8' );
+
+    my $octets;
+    if ( !$h_result->{is_encoded} ) { $octets = encode( 'UTF-8', $h_result->{body} ); }
+    else                            { $octets = $h_result->{body} }
+
     $o_response->body($octets);
+
     return $o_response;
 }
 

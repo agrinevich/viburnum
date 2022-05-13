@@ -6,12 +6,20 @@
 
 <hr noshade size="1">
 
-<form name="bkp-create" action="/admin/bkp/create" method="POST">
-<input type="submit" value="Backup Now">
-</form>
-<br>
-
 <table>
+    <tr>
+        <th colspan="2">
+            <form name="bkp-create" action="/admin/bkp/create" method="GET">
+                <input type="submit" value="Backup Now">
+            </form>
+        </th>
+        <th colspan="2">
+            <form name="bkp-upload" action="/admin/bkp/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file">
+                <input type="submit" value="Upload Backup">
+            </form>
+        </th>
+    </tr>
 [% list %]
 </table>
 

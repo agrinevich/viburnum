@@ -3,6 +3,8 @@ package App::Admin::Bkp::Download;
 use strict;
 use warnings;
 
+use Util::Files;
+
 our $VERSION = '1.1';
 
 sub doit {
@@ -18,25 +20,24 @@ sub doit {
     my $bkp_path = $app->config->{bkp}->{path};
     my $bkp_file = $root_dir . $bkp_path . q{/} . $bkp_name . '.zip';
 
-    if ( !e $bkp_file) {
+    if ( !-e $bkp_file ) {
         return {
             url => $app->config->{site}->{host} . '/admin/bkp?msg=error',
         };
     }
 
-    #
-    #
-    #
-    my $fh             = 'foo';
-    my $content_length = -s $bkp_file;
-    # do {
-    #     use bytes;
-    # }
+    my $fh = Util::Files::file_handle(
+        file    => $bkp_file,
+        mode    => q{<},
+        binmode => q{:raw},
+    );
 
     return {
-        # url => $app->config->{site}->{host} . '/admin/bkp?msg=success',
-        body           => $fh,
-        content_length => $content_length,
+        body             => $fh,
+        is_encoded       => 1,
+        content_type     => 'application/zip',
+        file_name        => $bkp_name . '.zip',
+        content_encoding => 'zip',
     };
 }
 
