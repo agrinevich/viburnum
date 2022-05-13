@@ -5,6 +5,7 @@ use warnings;
 
 use POSIX ();
 use POSIX qw(strftime);
+
 use Util::Files;
 
 our $VERSION = '1.1';
@@ -20,6 +21,7 @@ sub doit {
     my $dbh      = $app->dbh;
     my $root_dir = $app->root_dir;
     my $bkp_path = $app->config->{bkp}->{path};
+
     my $bkp_name = strftime( '%Y%m%d-%H%M%S', localtime );
 
     # 1. templates backup
@@ -110,6 +112,10 @@ sub doit {
     # reset permission to write
     my $mode2 = oct '755';
     chmod $mode2, $bkp_dir2;
+
+    #
+    # TODO: rmdir $root_dir . $bkp_path . q{/} . $bkp_name
+    #
 
     return {
         url => $app->config->{site}->{host} . '/admin/bkp?msg=success',

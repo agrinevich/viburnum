@@ -22,6 +22,10 @@ sub doit {
     my $root_dir = $app->root_dir;
     my $bkp_path = $app->config->{bkp}->{path};
 
+    #
+    # TODO: move extraction here
+    #
+
     # templates backup
 
     if ($want_tpl) {
@@ -63,6 +67,10 @@ sub doit {
             table => 'pages',
         );
     }
+
+    #
+    # TODO: rmdir extracted
+    #
 
     return {
         url => $app->config->{site}->{host} . '/admin/bkp?msg=success',

@@ -1,5 +1,7 @@
 <tr>
-    <td>[% name %]</td>
+    <td>
+        <a href="/admin/bkp/download?name=[% name %]">[% name %]</a>
+    </td>
     <td>
         <form name="bkp-delete" action="/admin/bkp/delete" method="GET">
             <input type="hidden" name="name" value="[% name %]">
@@ -7,10 +9,7 @@
         </form>
     </td>
     <td>
-        <form name="bkp-download" action="/admin/bkp/download" method="GET">
-            <input type="hidden" name="name" value="[% name %]">
-            <input type="submit" value="Download">
-        </form>
+        [% size %]
     </td>
     <td>
         <form name="bkp-restore" action="/admin/bkp/restore" method="POST">

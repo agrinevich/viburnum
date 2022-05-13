@@ -106,6 +106,19 @@ sub get_files {
     return \@result;
 }
 
+sub file_handle {
+    my (%args) = @_;
+
+    my $file    = $args{file};
+    my $mode    = $args{mode};
+    my $binmode = $args{binmode};
+
+    my $o_file = Path::Tiny->new($file);
+    my $fh     = $o_file->filehandle( $mode, $binmode );
+
+    return $fh;
+}
+
 sub read_file {
     my (%args) = @_;
 
@@ -248,6 +261,26 @@ sub create_zip {
         file => $file,
         size => format_bytes($size),
     };
+}
+
+sub extract_zip {
+    my (%args) = @_;
+
+    my $file    = $args{file};
+    my $dst_dir = $args{dst_dir};
+
+    my $zip = Archive::Zip->new();
+    my $rs  = $zip->read($file);
+
+    if ( $rs != AZ_OK ) {
+        return 'Failed to read: ' . $file;
+    }
+
+    my $real_dir = path($dst_dir)->realpath;
+
+    my $es = $zip->extractTree( undef, $real_dir );
+
+    return $es == AZ_OK ? q{} : 'Failed to extract';
 }
 
 1;
