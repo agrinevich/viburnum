@@ -23,12 +23,9 @@ sub doit {
     my $bkp_path = $app->config->{bkp}->{path};
     my $root_dir = $app->root_dir;
 
-    #
-    # TODO: lisy zip files not dirs
-    #
     my $a_bkps = Util::Files::get_files(
-        dir       => $root_dir . $bkp_path,
-        dirs_only => 1,
+        dir        => $root_dir . $bkp_path,
+        files_only => 1,
     );
 
     my @bkps = map { $_->{name} } @{$a_bkps};

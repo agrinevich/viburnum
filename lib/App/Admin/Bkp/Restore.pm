@@ -13,25 +13,36 @@ sub doit {
     my $app       = $args{app};
     my $o_request = $args{o_request};
 
-    my $o_params = $o_request->parameters();
-    my $bkp_name = $o_params->{name} || q{-}; # better to have non-empty
-    my $want_tpl = $o_params->{tpl} || 0;
-    my $want_sql = $o_params->{sql} || 0;
+    my $o_params  = $o_request->parameters();
+    my $file_name = $o_params->{name} || q{-}; # better to have non-empty
+    my $want_tpl  = $o_params->{tpl} || 0;
+    my $want_sql  = $o_params->{sql} || 0;
 
     my $dbh      = $app->dbh;
     my $root_dir = $app->root_dir;
     my $bkp_path = $app->config->{bkp}->{path};
 
-    #
-    # TODO: move extraction here
-    #
+    my $zip_file = $root_dir . $bkp_path . q{/} . $file_name;
+    my $err      = Util::Files::extract_zip(
+        file    => $zip_file,
+        dst_dir => $root_dir . $bkp_path,
+    );
+    if ($err) {
+        $app->logger->error($err);
+        return {
+            url => $app->config->{site}->{host} . '/admin/bkp?msg=error',
+        };
+    }
+
+    # backup is extracted here
+    my ( $bkp_name, undef ) = split /\./, $file_name;
+    my $tmp_dir = $root_dir . $bkp_path . q{/} . $bkp_name;
 
     # templates backup
-
     if ($want_tpl) {
         my $dst_path = $app->config->{templates}->{path_f};
         my $dst_dir  = $root_dir . $dst_path;
-        my $src_dir  = $root_dir . $bkp_path . q{/} . $bkp_name . '/tpl';
+        my $src_dir  = $tmp_dir . '/tpl';
 
         Util::Files::copy_dir_recursive(
             src_dir => $src_dir,
@@ -41,7 +52,7 @@ sub doit {
 
     # sql data backup
     if ($want_sql) {
-        my $src_dir = $root_dir . $bkp_path . q{/} . $bkp_name . '/sql';
+        my $src_dir = $tmp_dir . '/sql';
 
         _load_from_file(
             dbh   => $dbh,
@@ -66,11 +77,34 @@ sub doit {
             file  => $src_dir . '/pages.txt',
             table => 'pages',
         );
+
+        _load_from_file(
+            dbh   => $dbh,
+            file  => $src_dir . '/plugins.txt',
+            table => 'plugins',
+        );
+
+        _load_from_file(
+            dbh   => $dbh,
+            file  => $src_dir . '/notes.txt',
+            table => 'notes',
+        );
+
+        _load_from_file(
+            dbh   => $dbh,
+            file  => $src_dir . '/notes_versions.txt',
+            table => 'notes_versions',
+        );
+
+        _load_from_file(
+            dbh   => $dbh,
+            file  => $src_dir . '/notes_images.txt',
+            table => 'notes_images',
+        );
     }
 
-    #
-    # TODO: rmdir extracted
-    #
+    Util::Files::empty_dir_recursive( dir => $tmp_dir );
+    rmdir $tmp_dir;
 
     return {
         url => $app->config->{site}->{host} . '/admin/bkp?msg=success',
@@ -84,7 +118,7 @@ sub _load_from_file {
     my $file  = $args{file};
     my $table = $args{table};
 
-    return if !( -f $file );
+    return "File not found: $file" if !( -f $file );
 
     my $del = qq{DELETE FROM $table WHERE id > 0};
     $dbh->do($del);

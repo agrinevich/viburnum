@@ -13,12 +13,12 @@ sub doit {
     my $app       = $args{app};
     my $o_request = $args{o_request};
 
-    my $o_params = $o_request->parameters();
-    my $bkp_name = $o_params->{name} || q{};
+    my $o_params  = $o_request->parameters();
+    my $file_name = $o_params->{name} || q{};
 
     my $root_dir = $app->root_dir;
     my $bkp_path = $app->config->{bkp}->{path};
-    my $bkp_file = $root_dir . $bkp_path . q{/} . $bkp_name . '.zip';
+    my $bkp_file = $root_dir . $bkp_path . q{/} . $file_name;
 
     if ( !-e $bkp_file ) {
         return {
@@ -36,7 +36,7 @@ sub doit {
         body             => $fh,
         is_encoded       => 1,
         content_type     => 'application/zip',
-        file_name        => $bkp_name . '.zip',
+        file_name        => $file_name,
         content_encoding => 'zip',
     };
 }

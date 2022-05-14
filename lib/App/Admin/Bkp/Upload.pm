@@ -3,8 +3,6 @@ package App::Admin::Bkp::Upload;
 use strict;
 use warnings;
 
-use Util::Files;
-
 our $VERSION = '1.1';
 
 sub doit {
@@ -27,17 +25,6 @@ sub doit {
     my $file_dst  = $root_dir . $bkp_path . q{/} . $file_name;
 
     rename $file_tmp, $file_dst;
-
-    #
-    # TODO: move extraction to Restore
-    #
-    my $err = Util::Files::extract_zip(
-        file    => $file_dst,
-        dst_dir => $root_dir . $bkp_path,
-    );
-    if ($err) {
-        $app->logger->error($err);
-    }
 
     return {
         url => $app->config->{site}->{host} . '/admin/bkp',
