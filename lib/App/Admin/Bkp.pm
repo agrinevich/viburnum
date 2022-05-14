@@ -30,13 +30,18 @@ sub doit {
     my @bkp_size = map { $_->{name} => $_->{size} } @{$a_bkps};
     my %bkp_size = @bkp_size;
     my $bkp_list = q{};
+    my $tpl_item;
     foreach my $name ( sort keys %bkp_size ) {
         my $zip  = $bkp_dir . q{/} . $name;
         my $size = $bkp_size{$name};
+
+        if   ( index( $name, '_' ) == -1 ) { $tpl_item = 'list-item.html'; }
+        else                               { $tpl_item = 'list-itemf.html'; }
+
         $bkp_list .= Util::Renderer::parse_html(
             root_dir => $root_dir,
             tpl_path => $tpl_path . '/bkp',
-            tpl_name => 'list-item.html',
+            tpl_name => $tpl_item,
             h_vars   => {
                 name => $name,
                 size => $size,
@@ -50,8 +55,6 @@ sub doit {
         tpl_name => 'msg-text.html',
         msg      => $msg,
     );
-
-    # TODO: add full site backups
 
     my $body = Util::Renderer::parse_html(
         root_dir => $root_dir,

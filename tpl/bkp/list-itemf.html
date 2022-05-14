@@ -1,0 +1,17 @@
+<tr>
+    <td>
+        <a href="/admin/bkp/download?name=[% name %]">[% name %]</a>
+    </td>
+    <td>
+        <form name="bkp-delete" action="/admin/bkp/delete" method="GET">
+            <input type="hidden" name="name" value="[% name %]">
+            <input type="submit" value="Delete" onclick="return confirm('Delete?')">
+        </form>
+    </td>
+    <td>
+        [% size %]
+    </td>
+    <td>
+        Full backup should be handled manually
+    </td>
+</tr>
