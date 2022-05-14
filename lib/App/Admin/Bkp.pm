@@ -3,8 +3,6 @@ package App::Admin::Bkp;
 use strict;
 use warnings;
 
-use Number::Bytes::Human qw(format_bytes);
-
 use Util::Renderer;
 use Util::Files;
 
@@ -22,28 +20,26 @@ sub doit {
     my $tpl_path = $app->config->{templates}->{path};
     my $bkp_path = $app->config->{bkp}->{path};
     my $root_dir = $app->root_dir;
+    my $bkp_dir  = $root_dir . $bkp_path;
 
     my $a_bkps = Util::Files::get_files(
-        dir        => $root_dir . $bkp_path,
+        dir        => $bkp_dir,
         files_only => 1,
     );
 
-    my @bkps = map { $_->{name} } @{$a_bkps};
-
+    my @bkp_size = map { $_->{name} => $_->{size} } @{$a_bkps};
+    my %bkp_size = @bkp_size;
     my $bkp_list = q{};
-    foreach my $name ( sort @bkps ) {
-        my $zip  = $root_dir . $bkp_path . q{/} . $name . '.zip';
-        my $size = 0;
-        if ( -e $zip ) {
-            $size = -s $zip;
-        }
+    foreach my $name ( sort keys %bkp_size ) {
+        my $zip  = $bkp_dir . q{/} . $name;
+        my $size = $bkp_size{$name};
         $bkp_list .= Util::Renderer::parse_html(
             root_dir => $root_dir,
             tpl_path => $tpl_path . '/bkp',
             tpl_name => 'list-item.html',
             h_vars   => {
                 name => $name,
-                size => format_bytes($size),
+                size => $size,
             },
         );
     }
@@ -54,6 +50,8 @@ sub doit {
         tpl_name => 'msg-text.html',
         msg      => $msg,
     );
+
+    # TODO: add full site backups
 
     my $body = Util::Renderer::parse_html(
         root_dir => $root_dir,
