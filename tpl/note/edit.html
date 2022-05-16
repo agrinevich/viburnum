@@ -1,30 +1,44 @@
 <h1>Note</h1>
 
-<table>
-    <tr>
-        <td>[% nick %].html</td>
-    </tr>
-    <tr>
-        <td><a href="/admin/note?page_id=[% page_id %]">back to notes list</a></td>
-    </tr>
-</table>
+<form name="note-update" action="/admin/note/update" method="POST">
+    <input type="hidden" name="id" value="[% id %]">
+    <input type="hidden" name="page_id" value="[% page_id %]">
+    <table>
+        <tr>
+            <td>nick</td>
+            <td><input type="text" name="nick" value="[% nick %]" size="32" maxlength="128">.html</td>
+        </tr>
+        <tr>
+            <td>prio</td>
+            <td><input type="text" name="prio" value="[% prio %]" size="14" maxlength="10"></td>
+        </tr>
+        <tr>
+            <td>price</td>
+            <td><input type="text" name="price" value="[% price %]" size="14" maxlength="13"></td>
+        </tr>
+        <tr>
+            <td><a href="/admin/note?page_id=[% page_id %]">back to list</a></td>
+            <td><input type="submit" value="Save"></td>
+        </tr>
+    </table>
+</form>
 
 <h2>Images</h2>
 
 <table>
     <tr>
         <td>
-[% images %]
+            [% images %]
         </td>
     </tr>
     <tr>
         <td>
-        <form name="image-upload" action="/admin/note/upimg" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="hidden" name="id" value="[% id %]">
-        <input type="hidden" name="page_id" value="[% page_id %]">
-        <input type="submit" value="upload">
-        </form>
+            <form name="image-upload" action="/admin/note/upimg" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file">
+                <input type="hidden" name="id" value="[% id %]">
+                <input type="hidden" name="page_id" value="[% page_id %]">
+                <input type="submit" value="upload">
+            </form>
         </td>
     </tr>
 </table>

@@ -131,7 +131,6 @@ sub doit {
 
     my $list = q{};
     foreach my $h ( @{$a_notes} ) {
-
         my $a_images = Util::Notes::images(
             note_id => $h->{id},
             dbh     => $app->dbh,

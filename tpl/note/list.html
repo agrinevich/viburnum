@@ -2,57 +2,62 @@
 
 <table>
     <tr>
-    <th>#</th>
-    <th>add_dt</th>
-    <th>name</th>
-    <th>nick</th>
-    <th>image</th>
+        <th>#</th>
+        <th>name</th>
+        <th>price</th>
+        <th>nick</th>
+        <th>add_dt</th>
+        <th>image</th>
     </tr>
-    <tr><td colspan="5">[% paging %]</td></tr>
+    <tr>
+        <td colspan="6">[% paging %]</td>
+    </tr>
     [% list %]
-    <tr><td colspan="5">[% paging %]</td></tr>
+    <tr>
+        <td colspan="6">[% paging %]</td>
+    </tr>
 </table>
 
 <hr noshade size="1">
 
 <table>
     <tr>
-    <th>New Note</th>
-    <th>Config</th>
+        <th>New Note</th>
+        <th>Config</th>
     </tr>
     <tr>
-    <td>
+        <td>
 
-<form name="note-add" action="/admin/note/add" method="POST">
-    <input type="hidden" name="page_id" value="[% page_id %]">
-    <input type="hidden" name="page_name" value="[% page_name %]">
-    <input type="text" name="name" size="48" placeholder="Title in primary language">
-    <br>
-    <textarea placeholder="Description in primary language" name="descr" rows="4" cols="60"></textarea>
-    <br>
-    <input type="submit" value="Add">
-</form>
-<br>
-<br>
+            <form name="note-add" action="/admin/note/add" method="POST">
+                <input type="hidden" name="page_id" value="[% page_id %]">
+                <input type="hidden" name="page_name" value="[% page_name %]">
+                <input type="text" name="name" size="48" placeholder="Title in primary language">
+                <br>
+                <textarea placeholder="Description in primary language" name="descr" rows="4" cols="60"></textarea>
+                <br>
+                <input type="submit" value="Add">
+            </form>
+            <br>
+            <br>
 
-<form name="note-generate" action="/admin/note/gen" method="POST">
-    <input type="hidden" name="page_id" value="[% page_id %]">
-    <input type="submit" value="Generate">
-</form>
+            <form name="note-generate" action="/admin/note/gen" method="POST">
+                <input type="hidden" name="page_id" value="[% page_id %]">
+                <input type="submit" value="Generate">
+            </form>
 
-    </td>
-    <td>
+        </td>
+        <td>
 
-<table>
-    <form name="conf-upd" action="/admin/note/updconf" method="POST">
-    <input type="hidden" name="page_id" value="[% page_id %]">
-[% config %]
-    <tr>
-        <td colspan="2"><input type="submit" value="Update"></td>
-    </tr>
-    </form>
-</table>
+            <table>
+                <form name="conf-upd" action="/admin/note/updconf" method="POST">
+                    <input type="hidden" name="page_id" value="[% page_id %]">
+                    [% config %]
+                    <tr>
+                        <td colspan="2"><input type="submit" value="Update"></td>
+                    </tr>
+                </form>
+            </table>
 
-    </td>
+        </td>
     </tr>
 </table>
