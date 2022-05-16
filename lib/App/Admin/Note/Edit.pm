@@ -77,6 +77,10 @@ sub doit {
         }
     }
 
+    #
+    # TODO: add 'promo' checkbox
+    #
+
     my $body = Util::Renderer::parse_html(
         root_dir => $root_dir,
         tpl_path => $skin_tpl_path,

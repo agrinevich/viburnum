@@ -3,7 +3,6 @@ package App::Admin::Note::Add;
 use strict;
 use warnings;
 
-# use Util::Renderer;
 use Util::Langs;
 use Util::Notes;
 use Util::Config;

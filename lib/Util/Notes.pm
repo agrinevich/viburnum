@@ -47,6 +47,9 @@ EOF
     if ( $order_by eq 'prio' ) {
         $sel .= ' ORDER BY n.prio';
     }
+    elsif ( $order_by eq 'price' ) {
+        $sel .= ' ORDER BY n.price';
+    }
     elsif ( $order_by eq 'time' ) {
         $sel .= ' ORDER BY n.add_dt';
     }
@@ -217,7 +220,7 @@ sub build_p_descr {
     my $tpl_name      = "meta-descr${lang_suffix}.txt";
 
     my $tpl_file         = $root_dir . $skin_tpl_path . q{/} . $tpl_name;
-    my $tpl_file_primary = $root_dir . $skin_tpl_path . "/meta-descr.txt";
+    my $tpl_file_primary = $root_dir . $skin_tpl_path . '/meta-descr.txt';
     if ( !-e $tpl_file ) {
         Util::Files::copy_file(
             src => $tpl_file_primary,
