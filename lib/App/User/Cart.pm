@@ -83,12 +83,13 @@ sub doit {
     # lang links for this page
     my $a_langs    = Util::Langs::get_langs( dbh => $dbh );
     my $h_langhref = Util::Langs::build_hrefs(
-        a_langs   => $a_langs,
-        base_path => q{},
-        app_path  => $o_request->path_info(),
-        root_dir  => $root_dir,
-        site_host => $site_host,
-        tpl_path  => $tpl_path,
+        a_langs       => $a_langs,
+        lang_path_cur => $h_lang->{lang_path},
+        base_path     => q{},
+        app_path      => $o_request->path_info(),
+        root_dir      => $root_dir,
+        site_host     => $site_host,
+        tpl_path      => $tpl_path,
     );
     $h_marks->{lang_metatags} = $h_langhref->{metatags};
     $h_marks->{lang_links}    = $h_langhref->{links};

@@ -111,18 +111,39 @@ sub get_lang {
 sub build_hrefs {
     my (%args) = @_;
 
-    my $base_path    = $args{base_path};
-    my $app_path     = $args{app_path};
-    my $site_host    = $args{site_host};
-    my $root_dir     = $args{root_dir};
-    my $tpl_path     = $args{tpl_path};
-    my $tpl_path_gmi = $args{tpl_path_gmi};
-    my $a_langs      = $args{a_langs};
+    my $base_path     = $args{base_path};
+    my $app_path      = $args{app_path};
+    my $site_host     = $args{site_host};
+    my $root_dir      = $args{root_dir};
+    my $tpl_path      = $args{tpl_path};
+    my $tpl_path_gmi  = $args{tpl_path_gmi};
+    my $a_langs       = $args{a_langs};
+    my $lang_path_cur = $args{lang_path_cur};
 
     my $metatags  = q{};
     my $links     = q{};
     my $maphrefs  = q{};
     my $gmi_links = q{};
+
+    $metatags .= Util::Renderer::parse_html(
+        root_dir => $root_dir,
+        tpl_path => $tpl_path . '/lang',
+        tpl_name => 'metatag-canonical.html',
+        h_vars   => {
+            site_host => $site_host,
+            path      => $lang_path_cur . $base_path,
+        },
+    );
+
+    $maphrefs .= Util::Renderer::parse_html(
+        root_dir => $root_dir,
+        tpl_path => $tpl_path . '/lang',
+        tpl_name => 'maphref-canonical.html',
+        h_vars   => {
+            site_host => $site_host,
+            path      => $lang_path_cur . $base_path,
+        },
+    );
 
     foreach my $h_lang ( @{$a_langs} ) {
         my $lang_isocode = $h_lang->{lang_isocode};

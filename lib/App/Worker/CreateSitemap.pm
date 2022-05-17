@@ -125,21 +125,22 @@ EOF
             $base_path = $parent_path . q{/} . $nick;
         }
 
-        # lang links, metatags and sitemap hrefs for this page
-        my $h_langhref = Util::Langs::build_hrefs(
-            a_langs   => $a_langs,
-            base_path => $base_path,
-            root_dir  => $root_dir,
-            site_host => $site_host,
-            tpl_path  => $tpl_path,
-        );
-
         # lang versions of this page
         foreach my $h_lang ( @{$a_langs} ) {
             my $dir = $root_dir . $html_path . $h_lang->{lang_path} . $base_path;
             if ( !-d $dir ) {
                 Util::Files::make_path( path => $dir );
             }
+
+            # lang links, metatags and sitemap hrefs for this page
+            my $h_langhref = Util::Langs::build_hrefs(
+                a_langs       => $a_langs,
+                lang_path_cur => $h_lang->{lang_path},
+                base_path     => $base_path,
+                root_dir      => $root_dir,
+                site_host     => $site_host,
+                tpl_path      => $tpl_path,
+            );
 
             # create breadcrumbs file
             my $a_chain = [];
