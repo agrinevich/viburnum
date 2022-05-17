@@ -93,35 +93,33 @@ sub work {
 
         foreach my $h_lang ( @{$a_langs} ) {
             gen_list_page(
-                dbh         => $dbh,
-                root_dir    => $root_dir,
-                site_host   => $site_host,
-                html_path   => $html_path,
-                base_path   => $base_path,
-                bread_path  => $bread_path,
-                navi_path   => $navi_path,
-                tpl_path    => $tpl_path,
-                a_langs     => $a_langs,
-                lang_path   => $h_lang->{lang_path},
-                lang_id     => $h_lang->{lang_id},
-                lang_suffix => $h_lang->{lang_suffix},
-                page_id     => $page_id,
-                page_name   => $h_page->{name},
-                order_by    => $order_by,
-                order_how   => $order_how,
-                em_key      => $em_key,
-                offset      => $offset,
-                npp         => $npp,
-                skin        => $skin,
-                total_qty   => $total_qty,
-                p           => $p,
-                is_public   => $is_public,
+                dbh        => $dbh,
+                root_dir   => $root_dir,
+                site_host  => $site_host,
+                html_path  => $html_path,
+                base_path  => $base_path,
+                bread_path => $bread_path,
+                navi_path  => $navi_path,
+                tpl_path   => $tpl_path,
+                a_langs    => $a_langs,
+                h_lang     => $h_lang,
+                page_id    => $page_id,
+                page_name  => $h_page->{name},
+                order_by   => $order_by,
+                order_how  => $order_how,
+                em_key     => $em_key,
+                offset     => $offset,
+                npp        => $npp,
+                skin       => $skin,
+                total_qty  => $total_qty,
+                p          => $p,
+                is_public  => $is_public,
             );
         }
 
     }
 
-    carp('generated: notes pages');
+    carp("generated: $p_qty notes pages");
 
     $job->completed();
     return;
@@ -130,29 +128,32 @@ sub work {
 sub gen_list_page {
     my (%args) = @_;
 
-    my $dbh         = $args{dbh};
-    my $root_dir    = $args{root_dir};
-    my $site_host   = $args{site_host};
-    my $html_path   = $args{html_path};
-    my $base_path   = $args{base_path};
-    my $bread_path  = $args{bread_path};
-    my $navi_path   = $args{navi_path};
-    my $tpl_path    = $args{tpl_path};
-    my $a_langs     = $args{a_langs};
-    my $lang_path   = $args{lang_path};
-    my $lang_id     = $args{lang_id};
-    my $lang_suffix = $args{lang_suffix};
-    my $page_id     = $args{page_id};
-    my $page_name   = $args{page_name};
-    my $order_by    = $args{order_by};
-    my $order_how   = $args{order_how};
-    my $em_key      = $args{em_key};
-    my $offset      = $args{offset};
-    my $npp         = $args{npp};
-    my $skin        = $args{skin};
-    my $total_qty   = $args{total_qty};
-    my $p           = $args{p};
-    my $is_public   = $args{is_public};
+    my $dbh        = $args{dbh};
+    my $root_dir   = $args{root_dir};
+    my $site_host  = $args{site_host};
+    my $html_path  = $args{html_path};
+    my $base_path  = $args{base_path};
+    my $bread_path = $args{bread_path};
+    my $navi_path  = $args{navi_path};
+    my $tpl_path   = $args{tpl_path};
+    my $a_langs    = $args{a_langs};
+    my $h_lang     = $args{h_lang};
+    my $page_id    = $args{page_id};
+    my $page_name  = $args{page_name};
+    my $order_by   = $args{order_by};
+    my $order_how  = $args{order_how};
+    my $em_key     = $args{em_key};
+    my $offset     = $args{offset};
+    my $npp        = $args{npp};
+    my $skin       = $args{skin};
+    my $total_qty  = $args{total_qty};
+    my $p          = $args{p};
+    my $is_public  = $args{is_public};
+
+    my $lang_id     = $h_lang->{lang_id};
+    my $lang_path   = $h_lang->{lang_path};
+    my $lang_suffix = $h_lang->{lang_suffix};
+    my $lang_nick   = $h_lang->{lang_nick};
 
     my $suffix = $p ? $p : q{};
 
@@ -246,6 +247,7 @@ sub gen_list_page {
                 details_file => $details_file,
                 a_images     => $a_images,
                 a_langs      => $a_langs,
+                h_lang       => $h_lang,
                 h_note       => $h,
                 h_marks      => { %{$h_marks} },
             );
@@ -325,8 +327,11 @@ sub gen_details_page {
     my $details_file = $args{details_file};
     my $a_images     = $args{a_images};
     my $a_langs      = $args{a_langs};
+    my $h_lang       = $args{h_lang};
     my $h_note       = $args{h_note};
     my $h_marks      = $args{h_marks};
+
+    $h_note->{lang_nick} = $h_lang->{lang_nick};
 
     my $img_list_sm = q{};
     my $img_list_la = q{};

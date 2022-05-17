@@ -3,11 +3,6 @@ package App::Admin::Note::Update;
 use strict;
 use warnings;
 
-# use Util::Langs;
-# use Util::Notes;
-# use Util::Config;
-# use Util::Tree;
-
 our $VERSION = '1.1';
 
 sub doit {
@@ -18,7 +13,6 @@ sub doit {
 
     my $o_params = $o_request->parameters();
 
-    # my $page_id = $o_params->{page_id} || 0;
     my $id   = $o_params->{id}   || 0;
     my $prio = $o_params->{prio} || 0;
     my $nick = $o_params->{nick};
@@ -29,6 +23,11 @@ sub doit {
     if ( $price !~ /[\d.]/ ) {
         $price = 0;
     }
+
+    #
+    # TODO: get old nick before update and
+    # delete old page if nick is changed
+    #
 
     my $upd = <<'EOF';
         UPDATE notes SET
