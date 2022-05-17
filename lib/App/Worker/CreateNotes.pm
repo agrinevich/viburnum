@@ -150,20 +150,22 @@ sub gen_list_page {
     my $p          = $args{p};
     my $is_public  = $args{is_public};
 
-    my $lang_id     = $h_lang->{lang_id};
-    my $lang_path   = $h_lang->{lang_path};
-    my $lang_suffix = $h_lang->{lang_suffix};
-    my $lang_nick   = $h_lang->{lang_nick};
+    my $lang_id      = $h_lang->{lang_id};
+    my $lang_path    = $h_lang->{lang_path};
+    my $lang_suffix  = $h_lang->{lang_suffix};
+    my $lang_nick    = $h_lang->{lang_nick};
+    my $lang_isocode = $h_lang->{lang_isocode};
 
     my $suffix = $p ? $p : q{};
 
     # lang links, metatags for this page
     my $h_langhref = Util::Langs::build_hrefs(
-        a_langs   => $a_langs,
-        base_path => $base_path . "/index$suffix.html",
-        root_dir  => $root_dir,
-        site_host => $site_host,
-        tpl_path  => $tpl_path,
+        a_langs       => $a_langs,
+        lang_path_cur => $lang_path,
+        base_path     => $base_path . "/index$suffix.html",
+        root_dir      => $root_dir,
+        site_host     => $site_host,
+        tpl_path      => $tpl_path,
     );
 
     my $h_marks = Util::Tree::get_marks(
@@ -367,11 +369,12 @@ sub gen_details_page {
     $h_marks->{page_descr} = $h_note->{p_descr};
     # lang links, metatags for this page
     my $h_langhref = Util::Langs::build_hrefs(
-        a_langs   => $a_langs,
-        base_path => $base_path . q{/} . $details_file,
-        root_dir  => $root_dir,
-        site_host => $site_host,
-        tpl_path  => $tpl_path,
+        a_langs       => $a_langs,
+        lang_path_cur => $h_lang->{lang_path},
+        base_path     => $base_path . q{/} . $details_file,
+        root_dir      => $root_dir,
+        site_host     => $site_host,
+        tpl_path      => $tpl_path,
     );
     $h_marks->{lang_metatags} = $h_langhref->{metatags};
     $h_marks->{lang_links}    = $h_langhref->{links};
