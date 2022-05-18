@@ -27,34 +27,54 @@ sub doit {
     my $navi_path  = $app->config->{data}->{navi_path};
     my $html_path  = $app->config->{data}->{html_path};
 
-    my $page_path = q{}; # we are using root user layout
+    my $page_path = q{}; # we are using root layout
 
     my $h_lang = Util::Langs::get_lang(
         dbh       => $dbh,
         lang_nick => $lang_nick,
     );
 
-    # TODO: _delete_expired();
-
     my $a_items = get_items(
         dbh     => $dbh,
         sess_id => $sess->sess_id,
         lang_id => $h_lang->{lang_id},
     );
-    my $list = q{};
+    my $total_sum = 0;
+    my $list      = q{};
     foreach my $h ( @{$a_items} ) {
+        my $sum = $h->{price} * $h->{qty};
+        $total_sum += $sum;
+
+        my $item_path;   # TODO !
+        my $qty_options; # TODO !
+
         $list .= Util::Renderer::parse_html(
             root_dir => $root_dir,
             tpl_path => $tpl_path . '/user',
             tpl_name => 'cart-item.html',
             h_vars   => {
-                id    => $h->{id},
-                qty   => $h->{qty},
-                price => $h->{price},
-                name  => $h->{name},
+                id          => $h->{id},
+                qty         => $h->{qty},
+                price       => $h->{price},
+                name        => $h->{name},
+                path        => $item_path,
+                sum         => $sum,
+                qty_options => $qty_options,
+                lang_nick   => $h_lang->{lang_nick},
             },
         );
     }
+
+    $total_sum = sprintf '%.2f', $total_sum;
+
+    $list .= Util::Renderer::parse_html(
+        root_dir => $root_dir,
+        tpl_path => $tpl_path . '/user',
+        tpl_name => 'cart-total.html',
+        h_vars   => {
+            total_sum => $total_sum,
+        },
+    );
 
     my $tpl_name = sprintf 'cart%s.html', $h_lang->{lang_suffix};
     my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
@@ -70,7 +90,8 @@ sub doit {
 
     my $h_marks = {};
 
-    $h_marks->{page_main} = Util::Renderer::parse_html(
+    $h_marks->{page_title} = 'Cart';
+    $h_marks->{page_main}  = Util::Renderer::parse_html(
         root_dir => $root_dir,
         tpl_path => $tpl_path . '/user',
         tpl_name => $tpl_name,
