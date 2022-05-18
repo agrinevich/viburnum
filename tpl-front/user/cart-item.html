@@ -1,5 +1,14 @@
 <tr>
-    <td>[% name %]</td>
-    <td>[% qty %]</td>
-    <td>[% price %]</td>
+    <td><a href="[% path %]">[% name %]</a></td>
+    <td align="right">[% price %]</td>
+    <td>
+        <form action="/cart/update" method="POST">
+            <input type="hidden" name="l" value="[% lang_nick %]">
+            <input type="hidden" name="id" value="[% id %]">
+            <select name="qty" onchange="this.form.submit()">
+                [% qty_options %]
+            </select>
+        </form>
+    </td>
+    <td align="right">[% sum %]</td>
 </tr>

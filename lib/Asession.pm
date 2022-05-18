@@ -1,7 +1,6 @@
 package Asession;
 
 use Moo;
-use Const::Fast;
 use English qw(-no_match_vars);
 
 use Util::Crypto;
@@ -125,7 +124,7 @@ EOF
     my $upd = sprintf $upd_tpl, $otp_ttl;
     $self->dbh->do($upd);
 
-    # expired session goods in shopping carts
+    # clean shopping carts for expired sessions
     my $sel = <<'EOF';
         SELECT id
         FROM sess
@@ -134,11 +133,11 @@ EOF
     my $sth2 = $self->dbh->prepare($sel);
     $sth2->execute($cookie_ttl);
     while ( my ($sid) = $sth2->fetchrow_array() ) {
-        $self->dbh->do(qq{DELETE FROM sess_goods WHERE sess_id = "$sid"});
+        $self->dbh->do(qq{DELETE FROM sess_cart WHERE sess_id = "$sid"});
     }
     $sth2->finish();
 
-    # expired sessions
+    # clean expired sessions
     my $del_tpl = <<'EOF';
         DELETE FROM sess
         WHERE UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(updated_at) > %s

@@ -156,11 +156,6 @@ sub gen_page {
 
     # generate lang versions for this page
     foreach my $h_lang ( @{$a_langs} ) {
-        # my $dir = $root_dir . $html_path . $h_lang->{lang_path} . $base_path;
-        # if ( !-d $dir ) {
-        #     Util::Files::make_path( path => $dir );
-        # }
-
         my $h_marks = Util::Tree::get_marks(
             dbh     => $dbh,
             page_id => $id,
@@ -216,6 +211,7 @@ sub gen_page {
 
         # and create half-ready layout template for 'user' app
         my %umarks = %{$h_marks};
+        $umarks{page_title} = '[% page_title %]';
         $umarks{page_main}  = '[% page_main %]';
         $umarks{lang_links} = '[% lang_links %]';
         Util::Renderer::write_html(
