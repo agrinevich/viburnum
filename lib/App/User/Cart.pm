@@ -3,11 +3,17 @@ package App::User::Cart;
 use strict;
 use warnings;
 
+use Const::Fast;
+
 use Util::Renderer;
 use Util::Files;
 use Util::Langs;
+use Util::Tree;
+use Util::Notes;
 
 our $VERSION = '1.1';
+
+const my $_MAX_QTY => 100;
 
 sub doit {
     my ( undef, %args ) = @_;
@@ -27,7 +33,8 @@ sub doit {
     my $navi_path  = $app->config->{data}->{navi_path};
     my $html_path  = $app->config->{data}->{html_path};
 
-    my $page_path = q{}; # we are using root layout
+    my $page_path = q{};        # root layout
+    my $a_qty     = _qty_list();
 
     my $h_lang = Util::Langs::get_lang(
         dbh       => $dbh,
@@ -42,11 +49,31 @@ sub doit {
     my $total_sum = 0;
     my $list      = q{};
     foreach my $h ( @{$a_items} ) {
-        my $sum = $h->{price} * $h->{qty};
-        $total_sum += $sum;
+        my $h_note = Util::Notes::get_note(
+            dbh => $app->dbh,
+            id  => $h->{id},
+        );
 
-        my $item_path;   # TODO !
-        my $qty_options; # TODO !
+        my $base_path = Util::Tree::page_path(
+            dbh     => $app->dbh,
+            page_id => $h_note->{page_id},
+        );
+
+        my $details_path = $h_lang->{lang_path} . $base_path;
+        my $details_file = $h_note->{nick} . '.html';
+        my $item_path    = $details_path . q{/} . $details_file;
+
+        my $qty_options = Util::Renderer::build_options(
+            items    => $a_qty,
+            id_sel   => $h->{qty},
+            root_dir => $root_dir,
+            tpl_path => $tpl_path . '/user',
+            tpl_file => 'cart-qty-option.html',
+        );
+
+        my $sum = $h->{price} * $h->{qty};
+        $sum = sprintf '%.2f', $sum;
+        $total_sum += $sum;
 
         $list .= Util::Renderer::parse_html(
             root_dir => $root_dir,
@@ -65,27 +92,43 @@ sub doit {
         );
     }
 
-    $total_sum = sprintf '%.2f', $total_sum;
+    my $tpl_name = q{};
+    if ($list) {
+        $total_sum = sprintf '%.2f', $total_sum;
 
-    $list .= Util::Renderer::parse_html(
-        root_dir => $root_dir,
-        tpl_path => $tpl_path . '/user',
-        tpl_name => 'cart-total.html',
-        h_vars   => {
-            total_sum => $total_sum,
-        },
-    );
-
-    my $tpl_name = sprintf 'cart%s.html', $h_lang->{lang_suffix};
-    my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
-
-    if ( !-e $tpl_file ) {
-        # create tpl from default tpl
-        my $tpl_file_primary = $root_dir . $tpl_path . '/user/cart.html';
-        Util::Files::copy_file(
-            src => $tpl_file_primary,
-            dst => $tpl_file,
+        $list .= Util::Renderer::parse_html(
+            root_dir => $root_dir,
+            tpl_path => $tpl_path . '/user',
+            tpl_name => 'cart-total.html',
+            h_vars   => {
+                total_sum => $total_sum,
+            },
         );
+
+        $tpl_name = sprintf 'cart%s.html', $h_lang->{lang_suffix};
+        my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
+
+        if ( !-e $tpl_file ) {
+            # create tpl from default tpl
+            my $tpl_file_primary = $root_dir . $tpl_path . '/user/cart.html';
+            Util::Files::copy_file(
+                src => $tpl_file_primary,
+                dst => $tpl_file,
+            );
+        }
+    }
+    else {
+        $tpl_name = sprintf 'cart-empty%s.html', $h_lang->{lang_suffix};
+        my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
+
+        if ( !-e $tpl_file ) {
+            # create tpl from default tpl
+            my $tpl_file_primary = $root_dir . $tpl_path . '/user/cart-empty.html';
+            Util::Files::copy_file(
+                src => $tpl_file_primary,
+                dst => $tpl_file,
+            );
+        }
     }
 
     my $h_marks = {};
@@ -160,37 +203,17 @@ EOF
     return \@result;
 }
 
-# sub _delete_expired {
-#     my (%args) = @_;
+sub _qty_list {
+    my @result = ();
 
-#     my $dbh      = $args{dbh};
-#     my $ttl_days = $args{ttl_days};
+    foreach my $i ( 1 .. $_MAX_QTY ) {
+        push @result, {
+            id   => $i,
+            name => $i,
+        };
+    }
 
-#     return if !$ttl_days;
-
-#     my @ids = ();
-
-#     my $sel = <<'EOF';
-#         SELECT id
-#         FROM notes
-#         WHERE page_id = ?
-#         AND is_ext = 1
-#         AND TO_DAYS(NOW()) - TO_DAYS(add_dt) > ?
-# EOF
-#     my $sth = $dbh->prepare($sel);
-#     $sth->execute( $page_id, $ttl_days );
-#     while ( my ($id) = $sth->fetchrow_array() ) {
-#         push @ids, $id;
-#     }
-#     $sth->finish();
-
-#     foreach my $note_id (@ids) {
-#         $dbh->do("DELETE FROM notes_versions WHERE note_id = $note_id");
-#         $dbh->do("DELETE FROM notes_images WHERE note_id = $note_id");
-#         $dbh->do("DELETE FROM notes WHERE id = $note_id");
-#     }
-
-#     return;
-# }
+    return \@result;
+}
 
 1;

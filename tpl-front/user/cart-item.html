@@ -1,8 +1,11 @@
 <tr>
-    <td><a href="[% path %]">[% name %]</a></td>
+    <td>
+        [<a href="/user/cart/delete?l=[% lang_nick %]&id=[% id %]">X</a>] &nbsp;
+        <a href="[% path %]">[% name %]</a>
+    </td>
     <td align="right">[% price %]</td>
     <td>
-        <form action="/cart/update" method="POST">
+        <form action="/user/cart/update" method="POST">
             <input type="hidden" name="l" value="[% lang_nick %]">
             <input type="hidden" name="id" value="[% id %]">
             <select name="qty" onchange="this.form.submit()">
