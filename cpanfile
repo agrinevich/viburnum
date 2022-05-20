@@ -29,3 +29,4 @@ requires 'Text::Trim';
 requires 'Text::Xslate';
 requires 'TheSchwartz';
 requires 'Try::Tiny';
+requires 'URI::Escape';
