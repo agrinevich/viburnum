@@ -36,6 +36,34 @@ has 'sess_id' => (
 
 our $VERSION = '1.1';
 
+sub data {
+    my ($self) = @_;
+
+    my $sess_id = $self->sess_id();
+
+    my $sel = <<'EOF';
+        SELECT cust_id, otp_sha1hex, email, dest_area_id, dest_city_id, dest_wh_id, dest_id
+        FROM sess
+        WHERE id = ?
+EOF
+    my $sth = $self->dbh->prepare($sel);
+    $sth->execute($sess_id);
+    my ( $user_id, $otp, $email, $dest_area_id, $dest_city_id, $dest_wh_id, $dest_id )
+        = $sth->fetchrow_array();
+    $sth->finish();
+
+    return {
+        sess_id      => $sess_id,
+        user_id      => $user_id,
+        otp          => $otp,
+        email        => $email,
+        dest_area_id => $dest_area_id,
+        dest_city_id => $dest_city_id,
+        dest_wh_id   => $dest_wh_id,
+        dest_id      => $dest_id,
+    };
+}
+
 sub handle {
     my ( $self, %args ) = @_;
 
