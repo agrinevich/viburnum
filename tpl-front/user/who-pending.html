@@ -1,0 +1,10 @@
+<form name="otpcheck" action="/user/who/checkotp" method="POST">
+    <input type="hidden" name="l" value="[% lang_nick %]">
+    <input type="hidden" name="ret" value="[% ret_url %]">
+    <input type="hidden" name="phone" value="[% phone %]">
+    [% phone %]<br>
+    OTP: <input type="text" name="otp" value="" size="8" maxlength="8">
+    <input type="submit" value="Check">
+</form>
+
+<p>Якщо ви не отримали SMS з одноразовим паролем - <a href="/user/who/">спробуйте знову</a> через 5 хвилин.</p>

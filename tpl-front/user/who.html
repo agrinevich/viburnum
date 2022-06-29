@@ -1,5 +1,6 @@
-<form name="signin" action="/user/who/bysms" method="POST">
+<form name="otpsms" action="/user/who/enquotp" method="POST">
     <input type="hidden" name="l" value="[% lang_nick %]">
+    <input type="hidden" name="ret" value="[% ret_url %]">
     <input type="text" name="phone" value="" placeholder="+380">
     <br>
     <input type="submit" value="Отримати SMS">

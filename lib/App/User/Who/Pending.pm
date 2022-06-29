@@ -1,4 +1,4 @@
-package App::User::Who;
+package App::User::Who::Pending;
 
 use strict;
 use warnings;
@@ -18,6 +18,7 @@ sub doit {
     my $o_params  = $o_request->parameters();
     my $lang_nick = $o_params->{l} // q{};
     my $ret_url   = $o_params->{ret} // q{};
+    my $phone     = $o_params->{phone} // q{};
 
     my $dbh        = $app->dbh;
     my $root_dir   = $app->root_dir;
@@ -27,14 +28,6 @@ sub doit {
     my $navi_path  = $app->config->{data}->{navi_path};
     my $html_path  = $app->config->{data}->{html_path};
 
-    # check if session has pending code
-    my $h_sess = $app->session->data();
-    if ( $h_sess->{otp} ) {
-        return {
-            url => $app->config->{site}->{host} . '/user/who/pending?phone=' . $h_sess->{phone},
-        };
-    }
-
     my $page_path = q{}; # root layout
 
     my $h_lang = Util::Langs::get_lang(
@@ -42,10 +35,10 @@ sub doit {
         lang_nick => $lang_nick,
     );
 
-    my $tpl_name = sprintf 'who%s.html', $h_lang->{lang_suffix};
+    my $tpl_name = sprintf 'who-pending%s.html', $h_lang->{lang_suffix};
     my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
     if ( !-e $tpl_file ) {
-        my $tpl_file_primary = $root_dir . $tpl_path . '/user/who.html';
+        my $tpl_file_primary = $root_dir . $tpl_path . '/user/who-pending.html';
         Util::Files::copy_file(
             src => $tpl_file_primary,
             dst => $tpl_file,
@@ -62,6 +55,7 @@ sub doit {
         h_vars   => {
             lang_nick => $h_lang->{lang_nick},
             ret_url   => $ret_url,
+            phone     => $phone,
         },
     );
 
