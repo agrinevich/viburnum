@@ -11,9 +11,6 @@ use Email::Stuffer;
 use Email::Sender::Transport::SMTP qw();
 use Carp qw(croak carp);
 
-use Util::Config;
-use Util::DB;
-
 our $VERSION = '1.1';
 
 sub work {

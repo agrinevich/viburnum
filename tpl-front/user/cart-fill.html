@@ -1,11 +1,35 @@
-<!-- <table>
+<table>
     <tbody>
-        [% list %]
+        [% goods %]
+        <tr>
+            <td colspan="4" align="right">[% total_sum %]</td>
+        </tr>
     </tbody>
 </table>
- -->
-<form name="send" action="/user/cart/send" method="POST">
-    ...
+
+<form name="send" action="/user/cart/enqusend" method="POST">
     <input type="hidden" name="l" value="[% lang_nick %]">
-    <input type="submit" value="Замовити">
+    <table>
+        <tbody>
+            <tr>
+                <td>Ваше ім'я:</td>
+                <td><input type="text" name="name" value="[% name %]"></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><input type="text" name="email" value="[% email %]"></td>
+            </tr>
+            <tr>
+                <td>Адреса:</td>
+                <td><input type="text" name="address" value="[% address %]"></td>
+            </tr>
+            <tr>
+                <td>Телефон:</td>
+                <td>[% phone %]</td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="Надіслати"></td>
+            </tr>
+        </tbody>
+    </table>
 </form>

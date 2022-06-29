@@ -1,0 +1,13 @@
+Name: [% name %]
+
+Email: [% email %]
+
+Address: [% address %]
+
+Phone: [% phone %]
+
+-----
+
+[% goods %]
+
+Total: [% total_sum %]

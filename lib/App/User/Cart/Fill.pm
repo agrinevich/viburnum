@@ -7,6 +7,10 @@ use URI::Escape;
 
 use Util::Renderer;
 use Util::Langs;
+use Util::Files;
+use Util::Users;
+use Util::Notes;
+use Util::Cart;
 
 our $VERSION = '1.1';
 
@@ -28,7 +32,6 @@ sub doit {
     my $html_path  = $app->config->{data}->{html_path};
 
     my $h_sess = $app->session->data();
-
     if ( !$h_sess->{user_id} ) {
         my $ret  = $site_host . '/user/cart/fill?l=' . $lang_nick;
         my $rete = uri_escape($ret);
@@ -37,9 +40,10 @@ sub doit {
         };
     }
 
-    #
-    # TODO: read user data from DB
-    #
+    my $h_user = Util::Users::get_user(
+        dbh => $app->dbh,
+        id  => $h_sess->{user_id},
+    );
 
     my $page_path = q{}; # we are using root user layout
 
@@ -48,29 +52,65 @@ sub doit {
         lang_nick => $lang_nick,
     );
 
-    # my $tpl_name = sprintf 'say-%s%s.html', $msg_nick, $h_lang->{lang_suffix};
-    # my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
+    my $a_items = Util::Cart::get_goods(
+        dbh     => $dbh,
+        sess_id => $app->session->sess_id,
+        lang_id => $h_lang->{lang_id},
+    );
+    my $total_sum = 0;
+    my $goods     = q{};
+    foreach my $h ( @{$a_items} ) {
+        my $h_note = Util::Notes::get_note(
+            dbh => $app->dbh,
+            id  => $h->{id},
+        );
 
-    # if ( !-e $tpl_file ) {
-    #     # fallback to primary lang version - without suffix
-    #     $tpl_name = sprintf 'say-%s.html', $msg_nick;
-    #     $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
+        my $base_path = Util::Tree::page_path(
+            dbh     => $app->dbh,
+            page_id => $h_note->{page_id},
+        );
 
-    #     if ( !-e $tpl_file ) {
-    #         # fallback to default tpl with given lang version
-    #         $tpl_name = sprintf 'say-default%s.html', $h_lang->{lang_suffix};
-    #         $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
+        my $details_path = $h_lang->{lang_path} . $base_path;
+        my $details_file = $h_note->{nick} . '.html';
+        my $item_path    = $details_path . q{/} . $details_file;
 
-    #         if ( !-e $tpl_file ) {
-    #             # create tpl from default tpl in primary lang
-    #             my $tpl_file_primary = $root_dir . $tpl_path . '/user/say-default.html';
-    #             Util::Files::copy_file(
-    #                 src => $tpl_file_primary,
-    #                 dst => $tpl_file,
-    #             );
-    #         }
-    #     }
-    # }
+        my $sum = $h->{price} * $h->{qty};
+        $sum = sprintf '%.2f', $sum;
+        $total_sum += $sum;
+
+        $goods .= Util::Renderer::parse_html(
+            root_dir => $root_dir,
+            tpl_path => $tpl_path . '/user',
+            tpl_name => 'cart-item2.html',
+            h_vars   => {
+                id        => $h->{id},
+                qty       => $h->{qty},
+                price     => $h->{price},
+                name      => $h->{name},
+                path      => $item_path,
+                sum       => $sum,
+                lang_nick => $h_lang->{lang_nick},
+            },
+        );
+    }
+
+    if ( !$goods ) {
+        return {
+            url => $site_host . '/user/cart?l=' . $lang_nick,
+        };
+    }
+
+    $total_sum = sprintf '%.2f', $total_sum;
+
+    my $tpl_name = sprintf 'cart-fill%s.html', $h_lang->{lang_suffix};
+    my $tpl_file = $root_dir . $tpl_path . '/user/' . $tpl_name;
+    if ( !-e $tpl_file ) {
+        my $tpl_file_primary = $root_dir . $tpl_path . '/user/cart-fill.html';
+        Util::Files::copy_file(
+            src => $tpl_file_primary,
+            dst => $tpl_file,
+        );
+    }
 
     my $h_marks = {};
 
@@ -78,9 +118,15 @@ sub doit {
     $h_marks->{page_main}  = Util::Renderer::parse_html(
         root_dir => $root_dir,
         tpl_path => $tpl_path . '/user',
-        tpl_name => 'cart-fill.html',
+        tpl_name => $tpl_name,
         h_vars   => {
             lang_nick => $h_lang->{lang_nick},
+            phone     => $h_sess->{phone},
+            name      => $h_user->{name},
+            email     => $h_user->{email},
+            address   => $h_user->{address},
+            goods     => $goods,
+            total_sum => $total_sum,
         },
     );
 

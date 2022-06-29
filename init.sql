@@ -128,11 +128,14 @@ CREATE TABLE notes_images (
 CREATE TABLE sess (
   `id`           CHAR(40) NOT NULL DEFAULT '',
   `updated_at`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `cust_id`      INT UNSIGNED NOT NULL DEFAULT 0,
+  `user_id`      INT UNSIGNED NOT NULL DEFAULT 0,
+  `otp_digits`   INT UNSIGNED NOT NULL DEFAULT 0,
   `otp_sha1hex`  CHAR(40) NOT NULL DEFAULT '',
+  `otp_attempts` TINYINT UNSIGNED NOT NULL DEFAULT 0,
   `ip`           VARCHAR(45) NOT NULL DEFAULT '',
   `ua`           VARCHAR(255) NOT NULL DEFAULT '',
   `email`        VARCHAR(255) NOT NULL DEFAULT '',
+  `phone`        VARCHAR(255) NOT NULL DEFAULT '',
   `dest_area_id` INT UNSIGNED NOT NULL DEFAULT 0,
   `dest_city_id` INT UNSIGNED NOT NULL DEFAULT 0,
   `dest_wh_id`   INT UNSIGNED NOT NULL DEFAULT 0,
@@ -148,6 +151,26 @@ CREATE TABLE sess_cart (
   `item_price` DECIMAL(12,2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`sess_id`,`item_id`),
   INDEX sess_idx (`sess_id`)
+) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
+
+CREATE TABLE users (
+  `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `add_dt`    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `signin_dt` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `name`      VARCHAR(255) NOT NULL DEFAULT '',
+  `email`     VARCHAR(255) NOT NULL DEFAULT '',
+  `address`   VARCHAR(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
+
+CREATE TABLE users_phones (
+  `id`        INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id`   INT UNSIGNED NOT NULL DEFAULT 0,
+  `add_dt`    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `signin_dt` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `phone`     CHAR(16) NOT NULL DEFAULT '',
+  PRIMARY KEY (id),
+  UNIQUE KEY phone_idx (`phone`)
 ) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE InnoDB;
 
 /*
