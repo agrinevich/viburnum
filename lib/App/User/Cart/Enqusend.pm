@@ -39,10 +39,19 @@ sub doit {
         };
     }
 
-    # my $h_user = Util::Users::get_user(
-    #     dbh => $app->dbh,
-    #     id  => $h_sess->{user_id},
-    # );
+    my $err = Util::Users::update_user(
+        dbh     => $app->dbh,
+        id      => $h_sess->{user_id},
+        name    => $name,
+        email   => $email,
+        address => $address,
+    );
+    if ($err) {
+        $app->logger->error( 'Enqumail aborted: failed to save user: ' . $err );
+        return {
+            url => $app->config->{site}->{host} . '/user/say?m=cartnotsent',
+        };
+    }
 
     my $h_lang = Util::Langs::get_lang(
         dbh       => $app->dbh,

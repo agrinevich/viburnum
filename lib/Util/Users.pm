@@ -67,4 +67,26 @@ sub add_user {
     return;
 }
 
+sub update_user {
+    my (%args) = @_;
+
+    my $dbh     = $args{dbh};
+    my $id      = $args{id};
+    my $name    = $args{name};
+    my $email   = $args{email};
+    my $address = $args{address};
+
+    my $upd = <<'EOF';
+        UPDATE users SET
+            name = ?,
+            email = ?,
+            address = ?
+        WHERE id= ?
+EOF
+    my $sth = $dbh->prepare($upd);
+    $sth->execute( $name, $email, $address, $id );
+
+    return;
+}
+
 1;
