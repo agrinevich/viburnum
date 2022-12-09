@@ -1,1 +1,0 @@
-<a href="/" title="home"><img src="/images/home-18x18.png" width="18" height="18" alt="home"></a>

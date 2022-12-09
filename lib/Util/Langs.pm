@@ -116,14 +116,12 @@ sub build_hrefs {
     my $site_host     = $args{site_host};
     my $root_dir      = $args{root_dir};
     my $tpl_path      = $args{tpl_path};
-    my $tpl_path_gmi  = $args{tpl_path_gmi};
     my $a_langs       = $args{a_langs};
     my $lang_path_cur = $args{lang_path_cur};
 
-    my $metatags  = q{};
-    my $links     = q{};
-    my $maphrefs  = q{};
-    my $gmi_links = q{};
+    my $metatags = q{};
+    my $links    = q{};
+    my $maphrefs = q{};
 
     $metatags .= Util::Renderer::parse_html(
         root_dir => $root_dir,
@@ -176,18 +174,6 @@ sub build_hrefs {
             },
         );
 
-        if ($tpl_path_gmi) {
-            $gmi_links .= Util::Renderer::parse_html(
-                root_dir => $root_dir,
-                tpl_path => $tpl_path_gmi . '/lang',
-                tpl_name => 'link.gmi',
-                h_vars   => {
-                    lang_name => $lang_name,
-                    path      => $link_path,
-                },
-            );
-        }
-
         $maphrefs .= Util::Renderer::parse_html(
             root_dir => $root_dir,
             tpl_path => $tpl_path . '/lang',
@@ -201,10 +187,9 @@ sub build_hrefs {
     }
 
     return {
-        metatags  => $metatags,
-        links     => $links,
-        maphrefs  => $maphrefs,
-        gmi_links => $gmi_links,
+        metatags => $metatags,
+        links    => $links,
+        maphrefs => $maphrefs,
     };
 }
 
