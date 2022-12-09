@@ -244,13 +244,11 @@ sub gen_navi {
     my $parent_id = $args{parent_id} || 1;
     my $child_qty = $args{child_qty} || 0;
 
-    my $navi_path    = $config->{data}->{navi_path};
-    my $tpl_path     = $config->{templates}->{path_f};
-    my $tpl_path_gmi = $config->{templates}->{path_gmi};
+    my $navi_path = $config->{data}->{navi_path};
+    my $tpl_path  = $config->{templates}->{path_f};
 
-    my $links_m   = q{}; # mobile menu
-    my $links_d   = q{}; # desktop menu
-    my $links_gmi = q{}; # gemini menu
+    my $links_m = q{}; # mobile menu
+    my $links_d = q{}; # desktop menu
 
     my $sel = <<'EOF';
         SELECT
@@ -283,13 +281,12 @@ EOF
         if ( $id == $id_cur ) {
             $suffix  = '-cur';
             $h_child = _get_child_links(
-                dbh          => $dbh,
-                root_dir     => $root_dir,
-                tpl_path     => $tpl_path,
-                tpl_path_gmi => $tpl_path_gmi,
-                lang_id      => $lang_id,
-                lang_path    => $lang_path,
-                parent_id    => $id_cur,
+                dbh       => $dbh,
+                root_dir  => $root_dir,
+                tpl_path  => $tpl_path,
+                lang_id   => $lang_id,
+                lang_path => $lang_path,
+                parent_id => $id_cur,
             );
         }
 
@@ -315,18 +312,6 @@ EOF
             },
         );
 
-        if ($tpl_path_gmi) {
-            $links_gmi .= Util::Renderer::parse_html(
-                root_dir => $root_dir,
-                tpl_path => $tpl_path_gmi . '/cat',
-                tpl_name => "navi-item$suffix.gmi",
-                h_vars   => {
-                    path        => $lang_path . $page_path,
-                    name        => $page_name,
-                    child_links => $h_child->{links_gmi},
-                },
-            );
-        }
     }
     $sth->finish();
 
@@ -342,31 +327,21 @@ EOF
         body => $links_d,
     );
 
-    if ($tpl_path_gmi) {
-        my $gmi_navi_fname = $id_cur . q{-} . $lang_id . '.gmi';
-        Util::Files::write_file(
-            file => $root_dir . $navi_path . q{/} . $gmi_navi_fname,
-            body => $links_gmi,
-        );
-    }
-
     return;
 }
 
 sub _get_child_links {
     my (%args) = @_;
 
-    my $dbh          = $args{dbh};
-    my $root_dir     = $args{root_dir};
-    my $tpl_path     = $args{tpl_path};
-    my $tpl_path_gmi = $args{tpl_path_gmi};
-    my $lang_id      = $args{lang_id} // 1;
-    my $lang_path    = $args{lang_path} // q{};
-    my $parent_id    = $args{parent_id} // 0;
+    my $dbh       = $args{dbh};
+    my $root_dir  = $args{root_dir};
+    my $tpl_path  = $args{tpl_path};
+    my $lang_id   = $args{lang_id} // 1;
+    my $lang_path = $args{lang_path} // q{};
+    my $parent_id = $args{parent_id} // 0;
 
-    my $child_links_m   = q{};
-    my $child_links_d   = q{};
-    my $child_links_gmi = q{};
+    my $child_links_m = q{};
+    my $child_links_d = q{};
 
     my $sel = <<'EOF';
         SELECT
@@ -411,24 +386,12 @@ EOF
             },
         );
 
-        if ($tpl_path_gmi) {
-            $child_links_gmi .= Util::Renderer::parse_html(
-                root_dir => $root_dir,
-                tpl_path => $tpl_path_gmi . '/cat',
-                tpl_name => 'navi-child.gmi',
-                h_vars   => {
-                    path => $lang_path . $page_path,
-                    name => $page_name,
-                },
-            );
-        }
     }
     $sth->finish();
 
     return {
-        links_m   => $child_links_m,
-        links_d   => $child_links_d,
-        links_gmi => $child_links_gmi,
+        links_m => $child_links_m,
+        links_d => $child_links_d,
     };
 }
 

@@ -5,7 +5,6 @@ host   = _SITE_URL_WITH_HTTP_
 [templates]
 path     = /tpl
 path_f   = /tpl-front
-path_gmi = /tpl-gmi
 
 [data]
 bread_path  = /data/breadcrumbs

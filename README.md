@@ -66,7 +66,6 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - create dirs: tmp, log, bkp, img/la, img/sm, img2/la, img2/sm, data/navi, data/breadcrumbs
 - create and fill main.conf
 - copy ~/spot/tpl-front to /var/www/myblog.com (you can use mc)
-- copy ~/spot/tpl-gmi to /var/www/myblog.com (if you want Gemini mirror of your website)
 - create ~/spot/rsync.exclude (example file in repo)
 - [on local PC] scp -r ./html/* myblog@serverip:/var/www/myblog.com/html
 - [on local PC] create project dir and .Rexfile in it (there's example in repo)
@@ -76,14 +75,11 @@ On Debian cpanm probably will run into errors with some Perl modules. In such ca
 - when ip points to server run "certbot --nginx" to install Let's Encrypt certificate
 - restart nginx
 
-CMS Viburnum will automatically generate .gmi (and .html) pages for [Gemini](https://gemini.circumlunar.space/) network if you add directory tpl-gmi with .gmi templates. In such case you will need to setup Gemini server as well (you can use same Lets Encrypt TLS certificate for your site in both networks).
-
 ## Usage
 
 Go "myblog.com/admin/" and enter login and password you set in main.conf
 
 TODO:
 - add CMS manual
-- add [gmid Gemini server](https://github.com/omar-polo/gmid/) setup manual
 - add unit tests
 - add how to create custom plugin

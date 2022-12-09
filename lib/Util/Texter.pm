@@ -15,45 +15,6 @@ our $VERSION = '1.1';
 const my $META_DESCR_MAX_LENGTH => 160;
 const my $DIR_NAME_MAX_LENGTH   => 32;
 
-sub html2gmi {
-    my (%args) = @_;
-
-    my $str = $args{str};
-
-    # replace h1, h2, h3 with #, ##, ###
-    $str =~ s/<h1>/\#/g;
-    $str =~ s/<\/h1>//g;
-
-    $str =~ s/<h2>/\#\#/g;
-    $str =~ s/<\/h2>//g;
-
-    $str =~ s/<h3>/\#\#\#/g;
-    $str =~ s/<\/h3>//g;
-
-    # replace li with *
-    $str =~ s/<li>/\* /g;
-    $str =~ s/<\/li>//g;
-
-    # my $hs     = HTML::Strip->new();
-    # my $result = $hs->parse($str);
-    # $hs->eof;
-
-    # my $p = HTML::Parser->new( api_version => 3 );
-    # $p->parse($str);
-    # $p->eof;
-
-    # my $formatter = HTML::FormatText->new( leftmargin => 0, rightmargin => 50 );
-    # my $result    = $formatter->format($str);
-
-    # TODO: replace with better cpan solution
-    $str =~ s/<[^>]*>//g;
-
-    $str =~ s/^[\s\t]+\n/\n/g;
-    $str =~ s/\n+/\n\n/g;
-
-    return $str;
-}
-
 sub cut_phrase {
     my ( $str, $max_length ) = @_;
 
