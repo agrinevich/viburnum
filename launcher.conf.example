@@ -1,0 +1,10 @@
+[rsync]
+src = /source/dir/
+dst = /var/www/yoursite.com/
+exclude = /source/dir/rsync.exclude
+
+[starman]
+dir = /var/www/yoursite.com
+workers = 1
+aport = 5002
+uport = 5003
