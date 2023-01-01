@@ -4,9 +4,10 @@
 
 ## General
 
+This project will be DEPRECATED - [pagekit](https://github.com/agrinevich/pagekit) is successor.
+
 Viburnum is Content Management System (CMS) with builtin Static Site Generator.
 
-This project is still **work in progress**.
 
 ![screenshot](/assets/images/cms-viburnum-screenshot.png)
 
